@@ -2,18 +2,25 @@ package edu.iu.sci2.visualization.bipartitenet;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.font.LineMetrics;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
+import edu.iu.sci2.visualization.bipartitenet.component.NodeView;
 import edu.iu.sci2.visualization.bipartitenet.component.Paintable;
+import edu.iu.sci2.visualization.bipartitenet.component.PaintableContainer;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 
 public class BipartiteGraphRenderer implements Paintable {
-	private BipartiteGraphDataModel data;
-//	private Map<Node, Point2D> nodePosition;
+	private final BipartiteGraphDataModel data;
+	private ImmutableMap<Node, NodeView> nodePosition;
+	
+	private PaintableContainer painter = new PaintableContainer();
 
 	private final Line2D leftLine = new Line2D.Double();
 
@@ -23,41 +30,45 @@ public class BipartiteGraphRenderer implements Paintable {
 	private static final int NODE_MAX_RADIUS = 15;
 	
 	
-	/**
-	 * Treats {@code vector} as a directed line segment, and computes the point
-	 * that is, for example, halfway along the line.
-	 * 
-	 * @param vector
-	 * @param proportion
-	 *            a number between 0 and 1, the fraction of the distance along
-	 *            the vector to travel.
-	 * @return
-	 */
-	public static Point2D getPointAlongLine(Line2D vector, double proportion) {
-		if (proportion < 0 || proportion > 1) {
-			throw new IllegalArgumentException(
-					"Proportion must be between 0 and 1");
-		}
-	
-		return new Point2D.Double(vector.getX1() + proportion * (vector.getX2() - vector.getX1()), 
-				vector.getY1() + proportion * (vector.getY2() - vector.getY1()));
-	}
-
 	public BipartiteGraphRenderer(BipartiteGraphDataModel skel, Line2D leftLine, Line2D rightLine) {
 		this.data = skel;
 		this.leftLine.setLine(leftLine);
 		this.rightLine.setLine(rightLine);
+		
+		nodePosition = ImmutableMap.copyOf(placeNodes());
 	}
+	
+	private LinkedHashMap<Node, NodeView> placeNodes() {
+		LinkedHashMap<Node,NodeView> nodeViews = Maps.newLinkedHashMap();
+		nodeViews.putAll(placeNodesOnLine(data.getRightNodes(), getRightLine()));
+		nodeViews.putAll(placeNodesOnLine(data.getLeftNodes(), getLeftLine()));
+		
+		for (NodeView nv : nodeViews.values()) {
+			painter.add(nv);
+		}
+		
+		return nodeViews;
+	}
+
+	private LinkedHashMap<Node, NodeView> placeNodesOnLine(ImmutableList<Node> nodes,
+			Line2D centerLine) {
+		LinkedHashMap<Node,NodeView> nodeViews = Maps.newLinkedHashMap();
+		int numNodes = nodes.size();
+		double denominator = Math.max(1, numNodes - 1); // don't divide by 0!
+		
+		for (int i = 0; i < numNodes; i++) {
+			Point2D centerPoint = LayoutUtils.getPointAlongLine(centerLine, i / denominator);
+			NodeView view = NodeView.create(nodes.get(i), centerPoint);
+			nodeViews.put(nodes.get(i), view);
+		}
+		return nodeViews;
+	}
+
 	public int getCenterToTextDistance() {
 		return getMaxRadius() + NODE_TEXT_PADDING;
 	}
 	
-	public float getFontCenterHeight(Graphics2D g) {
-		 LineMetrics lm = g.getFont().getLineMetrics("Asdf", g.getFontRenderContext());
-		 
-		 return lm.getAscent() / 2;
-	}
-
+	
 	public Line2D getLeftLine() {
 		return (Line2D) leftLine.clone();
 	}
@@ -73,23 +84,8 @@ public class BipartiteGraphRenderer implements Paintable {
 	public void paint(Graphics2D g) {
 		g.setColor(Color.black);
 		System.out.println(g.getClipBounds());
-		
-		renderNodesAndLabels(g, data.getLeftNodes(), getLeftLine());
-		renderNodesAndLabels(g, data.getRightNodes(), getRightLine());
-
+		painter.paint(g);
 	}
 	
-	
-	private void renderNodesAndLabels(Graphics2D g, ImmutableList<Node> nodes, Line2D line) {
-		for (int i = 0; i < nodes.size(); i++) {
-			Node n = nodes.get(i);
-			Point2D nodeCenter = getPointAlongLine(line, ((double) i) / nodes.size());
-			g.drawOval((int) nodeCenter.getX(), (int) nodeCenter.getY(), (int) n.getValue(), (int) n.getValue());
-			System.out.println(getFontCenterHeight(g));
-			g.drawString(n.getLabel(), (int) nodeCenter.getX() + getCenterToTextDistance(),
-					(int) nodeCenter.getY() + getFontCenterHeight(g));
-		}
-//		g.drawString()
-	}
 	
 }
