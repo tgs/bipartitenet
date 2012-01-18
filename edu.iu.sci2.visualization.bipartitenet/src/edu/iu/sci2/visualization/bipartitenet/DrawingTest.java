@@ -1,4 +1,5 @@
 package edu.iu.sci2.visualization.bipartitenet;
+
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,9 +18,8 @@ public class DrawingTest extends Canvas {
 	public void paint(Graphics g) {
 
 		BipartiteGraphRenderer r = new BipartiteGraphRenderer(
-				getTestSkeleton(), new BipartiteGraphLayoutModel(
-						new Line2D.Double(200, 10, 200, 500),
-						new Line2D.Double(400, 10, 400, 500)));
+				getTestSkeleton(), new Line2D.Double(200, 10, 200, 500),
+				new Line2D.Double(400, 10, 400, 500));
 		r.paint((Graphics2D) g.create(10, 10, 590, 590));
 
 	}
