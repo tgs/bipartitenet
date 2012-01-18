@@ -11,9 +11,9 @@ import org.apache.xmlgraphics.java2d.GraphicContext;
 import org.apache.xmlgraphics.java2d.ps.EPSDocumentGraphics2D;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 import edu.iu.sci2.visualization.bipartitenet.component.CanvasContainer;
+import edu.iu.sci2.visualization.bipartitenet.model.Edge;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 
 public class DrawingTest {
@@ -26,9 +26,13 @@ public class DrawingTest {
 	}
 
 	private static BipartiteGraphDataModel getTestDataModel() {
-		return new BipartiteGraphDataModel(ImmutableList.of(new Node(
-				"Cheezburger", 5)), ImmutableList.of(new Node("Llama", 2),
-				new Node("Cat", 4)), ImmutableMap.<Node, Node> of());
+		Node cheez = new Node(
+				"Cheezburger", 5);
+		Node llama = new Node("Llama", 2);
+		Node cat = new Node("Cat", 4);
+		return new BipartiteGraphDataModel(ImmutableList.of(cheez), 
+				ImmutableList.of(llama, cat),
+				ImmutableList.of(new Edge(cheez, llama), new Edge(cheez, cat)));
 	}
 
 	/**

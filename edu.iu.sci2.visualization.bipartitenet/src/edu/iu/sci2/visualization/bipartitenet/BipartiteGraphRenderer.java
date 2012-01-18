@@ -13,11 +13,12 @@ import com.google.common.collect.Maps;
 import edu.iu.sci2.visualization.bipartitenet.component.NodeView;
 import edu.iu.sci2.visualization.bipartitenet.component.Paintable;
 import edu.iu.sci2.visualization.bipartitenet.component.PaintableContainer;
+import edu.iu.sci2.visualization.bipartitenet.model.Edge;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 
 public class BipartiteGraphRenderer implements Paintable {
 	private final BipartiteGraphDataModel data;
-	private ImmutableMap<Node, NodeView> nodePosition;
+	private ImmutableMap<Node, NodeView> nodeToNodeView;
 	
 	private PaintableContainer painter = new PaintableContainer();
 
@@ -25,18 +26,24 @@ public class BipartiteGraphRenderer implements Paintable {
 
 	private final Line2D rightLine = new Line2D.Double();
 
-	private static final int NODE_TEXT_PADDING = 8;
-	private static final int NODE_MAX_RADIUS = 15;
-	
-	
 	public BipartiteGraphRenderer(BipartiteGraphDataModel skel, Line2D leftLine, Line2D rightLine) {
 		this.data = skel;
 		this.leftLine.setLine(leftLine);
 		this.rightLine.setLine(rightLine);
 		
-		nodePosition = ImmutableMap.copyOf(placeNodes());
+		nodeToNodeView = ImmutableMap.copyOf(placeNodes());
+		placeEdges();
 	}
 	
+	private void placeEdges() {
+		for (Edge e : data.getEdges()) {
+			EdgeView ev = new EdgeView(nodeToNodeView.get(e.getLeftNode()),
+					nodeToNodeView.get(e.getRightNode()));
+			
+			painter.add(ev);
+		}
+	}
+
 	private LinkedHashMap<Node, NodeView> placeNodes() {
 		LinkedHashMap<Node,NodeView> nodeViews = Maps.newLinkedHashMap();
 		nodeViews.putAll(placeNodesOnLine(data.getRightNodes(), getRightLine(), NodeView.LabelPainter.RIGHT));
@@ -63,19 +70,10 @@ public class BipartiteGraphRenderer implements Paintable {
 		return nodeViews;
 	}
 
-	public int getCenterToTextDistance() {
-		return getMaxRadius() + NODE_TEXT_PADDING;
-	}
-	
-	
 	public Line2D getLeftLine() {
 		return (Line2D) leftLine.clone();
 	}
 
-	public int getMaxRadius() {
-		return NODE_MAX_RADIUS;
-	}
-	
 	public Line2D getRightLine() {
 		return (Line2D) rightLine.clone();
 	}

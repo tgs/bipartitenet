@@ -7,13 +7,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
 
+import edu.iu.sci2.visualization.bipartitenet.model.Edge;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 
 public class BipartiteGraphDataModel {
 	private final ImmutableList<Node> leftNodes;
 	private final ImmutableList<Node> rightNodes;
 	
-	private final ImmutableMap<Node, Node> edges;
+	private final ImmutableList<Edge> edges;
 
 	private static final Ordering<Node> orderingByRadius = new Ordering<Node>() {
 		@Override
@@ -25,14 +26,14 @@ public class BipartiteGraphDataModel {
 
 	public BipartiteGraphDataModel(Collection<Node> leftNodes, 
 			Collection<Node> rightNodes, 
-			Map<Node,Node> edges) {
+			Collection<Edge> edges) {
 		super();
 		this.leftNodes = ImmutableList.copyOf(orderingByRadius.sortedCopy(leftNodes));
 		this.rightNodes = ImmutableList.copyOf(orderingByRadius.sortedCopy(rightNodes));
-		this.edges = ImmutableMap.copyOf(edges);
+		this.edges = ImmutableList.copyOf(edges);
 	}
 
-	public ImmutableMap<Node, Node> getEdges() {
+	public ImmutableList<Edge> getEdges() {
 		return edges;
 	}
 
