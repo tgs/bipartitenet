@@ -1,5 +1,6 @@
 package edu.iu.sci2.visualization.bipartitenet;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
@@ -16,7 +17,7 @@ import edu.iu.sci2.visualization.bipartitenet.component.Paintable;
 public class EdgeView implements Paintable {
 	
 	private static final double NODE_EDGE_SPACE = 4;
-	private static final double ARROW_SIDE_LENGTH = 6;
+	private static final double ARROW_HEAD_SIDE_LENGTH = 6;
 	private final NodeView dest;
 	private final NodeView src;
 
@@ -26,7 +27,9 @@ public class EdgeView implements Paintable {
 	}
 
 	@Override
-	public void paint(Graphics2D g) {
+	public void paint(Graphics2D gIn) {
+		Graphics2D g = (Graphics2D) gIn.create();
+		g.setColor(Color.gray);
 		LineSegment2D grossLine = new LineSegment2D(src.getNodeCenter(), dest.getNodeCenter());
 		double tStart = (getRadius(src) + NODE_EDGE_SPACE) / grossLine.getLength(),
 				tEnd = (getRadius(dest) + NODE_EDGE_SPACE) / grossLine.getLength();
@@ -40,7 +43,7 @@ public class EdgeView implements Paintable {
 
 	private void drawArrowHead(AbstractLine2D line, Graphics2D g) {
 		Point2D end = line.getLastPoint();
-		Point2D colinearPoint = line.getPoint(1 - (ARROW_SIDE_LENGTH / line.getLength()));
+		Point2D colinearPoint = line.getPoint(1 - (ARROW_HEAD_SIDE_LENGTH / line.getLength()));
 		Point2D cwPoint = colinearPoint.transform(AffineTransform2D.createRotation(end, Math.PI / 6));
 		Point2D ccwPoint = colinearPoint.transform(AffineTransform2D.createRotation(end, -Math.PI / 6));
 		SimplePolygon2D arrowHead = new SimplePolygon2D(end, cwPoint, ccwPoint);

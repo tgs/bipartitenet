@@ -47,8 +47,8 @@ public class BipartiteGraphRenderer implements Paintable {
 
 	private LinkedHashMap<Node, NodeView> placeNodes() {
 		LinkedHashMap<Node,NodeView> nodeViews = Maps.newLinkedHashMap();
-		nodeViews.putAll(placeNodesOnLine(data.getRightNodes(), getRightLine(), NodeView.LabelPainter.RIGHT));
-		nodeViews.putAll(placeNodesOnLine(data.getLeftNodes(), getLeftLine(), NodeView.LabelPainter.LEFT));
+		nodeViews.putAll(placeNodesOnLine(data.getRightNodes(), getRightLine(), NodeView.LeftRightDifference.RIGHT));
+		nodeViews.putAll(placeNodesOnLine(data.getLeftNodes(), getLeftLine(), NodeView.LeftRightDifference.LEFT));
 		
 		for (NodeView nv : nodeViews.values()) {
 			painter.add(nv);
@@ -58,7 +58,7 @@ public class BipartiteGraphRenderer implements Paintable {
 	}
 
 	private LinkedHashMap<Node, NodeView> placeNodesOnLine(ImmutableList<Node> nodes,
-			LineSegment2D centerLine, NodeView.LabelPainter painter) {
+			LineSegment2D centerLine, NodeView.LeftRightDifference painter) {
 		LinkedHashMap<Node,NodeView> nodeViews = Maps.newLinkedHashMap();
 		int numNodes = nodes.size();
 		double denominator = Math.max(1, numNodes - 1); // don't divide by 0!
@@ -81,7 +81,6 @@ public class BipartiteGraphRenderer implements Paintable {
 
 	public void paint(Graphics2D g) {
 		g.setColor(Color.black);
-		System.out.println(g.getClipBounds());
 		painter.paint(g);
 	}
 	

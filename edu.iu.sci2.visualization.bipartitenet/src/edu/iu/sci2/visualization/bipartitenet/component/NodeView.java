@@ -1,5 +1,6 @@
 package edu.iu.sci2.visualization.bipartitenet.component;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
@@ -10,7 +11,7 @@ import edu.iu.sci2.visualization.bipartitenet.LayoutUtils;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 
 public class NodeView implements Paintable {
-	public enum LabelPainter {
+	public enum LeftRightDifference {
 		LEFT {
 
 			@Override
@@ -25,6 +26,11 @@ public class NodeView implements Paintable {
 								+ LayoutUtils.getFontCenterHeight(g)));
 			}
 
+			@Override
+			Color getFillColor() {
+				return Color.pink;
+			}
+
 		},
 		RIGHT {
 			@Override
@@ -36,23 +42,29 @@ public class NodeView implements Paintable {
 						(int) nv.getNodeCenter().getY()
 								+ LayoutUtils.getFontCenterHeight(g));
 			}
+
+			@Override
+			Color getFillColor() {
+				return Color.orange;
+			}
 		};
 
 		abstract void paintLabel(NodeView nv, Graphics2D g);
+		abstract Color getFillColor();
 
 	}
 
 	private final Node node;
 	private final Point2D nodeCenter;
-	private LabelPainter labelPainter;
+	private LeftRightDifference leftRightDifference;
 	private static final int NODE_TEXT_PADDING = 8;
 	private static final int NODE_MAX_RADIUS = 15;
 
-	public NodeView(Node node, Point2D nodeCenter, LabelPainter painter) {
+	public NodeView(Node node, Point2D nodeCenter, LeftRightDifference painter) {
 		super();
 		this.node = node;
 		this.nodeCenter = nodeCenter;
-		this.labelPainter = painter;
+		this.leftRightDifference = painter;
 	}
 
 	public int getCenterToTextDistance() {
@@ -74,8 +86,11 @@ public class NodeView implements Paintable {
 	@Override
 	public void paint(Graphics2D g) {
 		Circle2D circle = new Circle2D(nodeCenter.getX(), nodeCenter.getY(), node.getValue());
+		leftRightDifference.paintLabel(this, g);
+		g.setColor(leftRightDifference.getFillColor());
+		circle.fill(g);
+		g.setColor(Color.black);
 		circle.draw(g);
-		labelPainter.paintLabel(this, g);
 	}
 
 }
