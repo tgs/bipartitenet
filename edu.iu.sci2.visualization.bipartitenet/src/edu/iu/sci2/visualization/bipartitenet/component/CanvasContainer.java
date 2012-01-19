@@ -7,6 +7,10 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 public class CanvasContainer extends Canvas {
+	/**
+	 * Serializable Sucks
+	 */
+	private static final long serialVersionUID = 437819803332326758L;
 	private PaintableContainer container = new PaintableContainer();
 	
 	public CanvasContainer() {

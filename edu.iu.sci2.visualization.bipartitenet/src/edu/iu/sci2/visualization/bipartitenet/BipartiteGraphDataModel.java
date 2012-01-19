@@ -1,10 +1,8 @@
 package edu.iu.sci2.visualization.bipartitenet;
 
 import java.util.Collection;
-import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
 
 import edu.iu.sci2.visualization.bipartitenet.model.Edge;

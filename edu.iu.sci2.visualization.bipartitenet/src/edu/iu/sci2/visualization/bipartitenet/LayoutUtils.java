@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 
 public class LayoutUtils {
 

@@ -2,14 +2,11 @@ package edu.iu.sci2.visualization.bipartitenet;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.geom.Line2D;
 
 import math.geom2d.AffineTransform2D;
 import math.geom2d.Point2D;
 import math.geom2d.line.AbstractLine2D;
 import math.geom2d.line.LineSegment2D;
-import math.geom2d.polygon.Polygon2DUtils;
 import math.geom2d.polygon.SimplePolygon2D;
 import edu.iu.sci2.visualization.bipartitenet.component.NodeView;
 import edu.iu.sci2.visualization.bipartitenet.component.Paintable;
