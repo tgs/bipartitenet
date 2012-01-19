@@ -2,10 +2,15 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: edu.iu.sci2.visualization.bipartitenet
 Bundle-SymbolicName: edu.iu.sci2.visualization.bipartitenet
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+X-AutoStart: true
 Import-Package: com.google.common.base;version="8.0.0",
- com.google.common.collect;version="8.0.0"
+ com.google.common.collect;version="8.0.0",
+ org.cishell.framework;version="1.0.0",
+ org.cishell.framework.algorithm;version="1.0.0",
+ org.cishell.framework.data;version="1.0.0"
 Bundle-ClassPath: xmlgraphics-commons-1.4.jar,
  .,
  javaGeom-0.10.0.jar
+Service-Component: OSGI-INF/component.xml
