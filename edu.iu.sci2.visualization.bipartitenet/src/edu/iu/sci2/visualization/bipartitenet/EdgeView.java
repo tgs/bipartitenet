@@ -28,8 +28,8 @@ public class EdgeView implements Paintable {
 		Graphics2D g = (Graphics2D) gIn.create();
 		g.setColor(Color.gray);
 		LineSegment2D grossLine = new LineSegment2D(src.getNodeCenter(), dest.getNodeCenter());
-		double tStart = (getRadius(src) + NODE_EDGE_SPACE) / grossLine.getLength(),
-				tEnd = (getRadius(dest) + NODE_EDGE_SPACE) / grossLine.getLength();
+		double tStart = (src.getRadius() + NODE_EDGE_SPACE) / grossLine.getLength(),
+				tEnd = (dest.getRadius() + NODE_EDGE_SPACE) / grossLine.getLength();
 		AbstractLine2D fineLine = grossLine.getSubCurve(tStart, 1 - tEnd);
 		
 		fineLine.draw(g);
@@ -46,10 +46,6 @@ public class EdgeView implements Paintable {
 		SimplePolygon2D arrowHead = new SimplePolygon2D(end, cwPoint, ccwPoint);
 		arrowHead.draw(g);
 		arrowHead.fill(g);
-	}
-
-	private double getRadius(NodeView n) {
-		return n.getNode().getValue();
 	}
 
 }

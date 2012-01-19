@@ -28,9 +28,9 @@ public class DrawingTest {
 
 	private static BipartiteGraphDataModel getTestDataModel() {
 		Node cheez = new Node(
-				"Cheezburger", 5);
-		Node llama = new Node("Llama", 2);
-		Node cat = new Node("Cat", 4);
+				"Cheezburger", 75);
+		Node llama = new Node("Llama", 25);
+		Node cat = new Node("Cat", 50);
 		return new BipartiteGraphDataModel(ImmutableList.of(cheez), 
 				ImmutableList.of(llama, cat),
 				ImmutableList.of(new Edge(cheez, llama), new Edge(cheez, cat)));

@@ -11,7 +11,7 @@ import edu.iu.sci2.visualization.bipartitenet.LayoutUtils;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 
 public class NodeView implements Paintable {
-	public enum LeftRightDifference {
+	public enum Section {
 		LEFT {
 
 			@Override
@@ -56,15 +56,17 @@ public class NodeView implements Paintable {
 
 	private final Node node;
 	private final Point2D nodeCenter;
-	private LeftRightDifference leftRightDifference;
+	private final Section leftRightDifference;
+	private final CircleRadiusCoding coding;
 	private static final int NODE_TEXT_PADDING = 8;
 	private static final int NODE_MAX_RADIUS = 15;
 
-	public NodeView(Node node, Point2D nodeCenter, LeftRightDifference painter) {
+	public NodeView(Node node, Point2D nodeCenter, Section painter, CircleRadiusCoding coding) {
 		super();
 		this.node = node;
 		this.nodeCenter = nodeCenter;
 		this.leftRightDifference = painter;
+		this.coding = coding;
 	}
 
 	public int getCenterToTextDistance() {
@@ -75,17 +77,21 @@ public class NodeView implements Paintable {
 		return NODE_MAX_RADIUS;
 	}
 
-	public Node getNode() {
+	private Node getNode() {
 		return node;
 	}
 
 	public Point2D getNodeCenter() {
 		return nodeCenter;
 	}
+	
+	public double getRadius() {
+		return coding.apply(node.getValue());
+	}
 
 	@Override
 	public void paint(Graphics2D g) {
-		Circle2D circle = new Circle2D(nodeCenter.getX(), nodeCenter.getY(), node.getValue());
+		Circle2D circle = new Circle2D(nodeCenter.getX(), nodeCenter.getY(), getRadius());
 		leftRightDifference.paintLabel(this, g);
 		g.setColor(leftRightDifference.getFillColor());
 		circle.fill(g);
