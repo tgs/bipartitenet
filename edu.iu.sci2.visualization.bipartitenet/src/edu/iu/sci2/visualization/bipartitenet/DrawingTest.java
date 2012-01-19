@@ -1,11 +1,12 @@
 package edu.iu.sci2.visualization.bipartitenet;
 
-import java.awt.geom.Line2D;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.swing.JFrame;
+
+import math.geom2d.line.LineSegment2D;
 
 import org.apache.xmlgraphics.java2d.GraphicContext;
 import org.apache.xmlgraphics.java2d.ps.EPSDocumentGraphics2D;
@@ -20,8 +21,8 @@ public class DrawingTest {
 
 	private static BipartiteGraphRenderer createRenderer() {
 		BipartiteGraphRenderer r = new BipartiteGraphRenderer(
-				getTestDataModel(), new Line2D.Double(200, 10, 200, 500),
-				new Line2D.Double(400, 10, 400, 500));
+				getTestDataModel(), new LineSegment2D(200, 10, 200, 500),
+				new LineSegment2D(400, 10, 400, 500));
 		return r;
 	}
 

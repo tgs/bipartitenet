@@ -2,9 +2,10 @@ package edu.iu.sci2.visualization.bipartitenet;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.util.LinkedHashMap;
+
+import math.geom2d.Point2D;
+import math.geom2d.line.LineSegment2D;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -22,14 +23,14 @@ public class BipartiteGraphRenderer implements Paintable {
 	
 	private PaintableContainer painter = new PaintableContainer();
 
-	private final Line2D leftLine = new Line2D.Double();
+	private final LineSegment2D leftLine;
 
-	private final Line2D rightLine = new Line2D.Double();
+	private final LineSegment2D rightLine;
 
-	public BipartiteGraphRenderer(BipartiteGraphDataModel skel, Line2D leftLine, Line2D rightLine) {
+	public BipartiteGraphRenderer(BipartiteGraphDataModel skel, LineSegment2D leftLine, LineSegment2D rightLine) {
 		this.data = skel;
-		this.leftLine.setLine(leftLine);
-		this.rightLine.setLine(rightLine);
+		this.leftLine = leftLine;
+		this.rightLine = rightLine;
 		
 		nodeToNodeView = ImmutableMap.copyOf(placeNodes());
 		placeEdges();
@@ -57,25 +58,25 @@ public class BipartiteGraphRenderer implements Paintable {
 	}
 
 	private LinkedHashMap<Node, NodeView> placeNodesOnLine(ImmutableList<Node> nodes,
-			Line2D centerLine, NodeView.LabelPainter painter) {
+			LineSegment2D centerLine, NodeView.LabelPainter painter) {
 		LinkedHashMap<Node,NodeView> nodeViews = Maps.newLinkedHashMap();
 		int numNodes = nodes.size();
 		double denominator = Math.max(1, numNodes - 1); // don't divide by 0!
 		
 		for (int i = 0; i < numNodes; i++) {
-			Point2D centerPoint = LayoutUtils.getPointAlongLine(centerLine, i / denominator);
+			Point2D centerPoint = centerLine.getPoint(i / denominator);
 			NodeView view = new NodeView(nodes.get(i), centerPoint, painter);
 			nodeViews.put(nodes.get(i), view);
 		}
 		return nodeViews;
 	}
 
-	public Line2D getLeftLine() {
-		return (Line2D) leftLine.clone();
+	public LineSegment2D getLeftLine() {
+		return leftLine;
 	}
 
-	public Line2D getRightLine() {
-		return (Line2D) rightLine.clone();
+	public LineSegment2D getRightLine() {
+		return rightLine;
 	}
 
 	public void paint(Graphics2D g) {

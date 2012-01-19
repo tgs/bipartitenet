@@ -7,4 +7,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.google.common.base;version="8.0.0",
  com.google.common.collect;version="8.0.0"
 Bundle-ClassPath: xmlgraphics-commons-1.4.jar,
- .
+ .,
+ javaGeom-0.10.0.jar
