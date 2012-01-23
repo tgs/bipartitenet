@@ -14,3 +14,4 @@ Bundle-ClassPath: xmlgraphics-commons-1.4.jar,
  .,
  javaGeom-0.10.0.jar
 Service-Component: OSGI-INF/component.xml
+Require-Bundle: org.junit
