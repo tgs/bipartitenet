@@ -1,5 +1,7 @@
 package edu.iu.sci2.visualization.bipartitenet.model;
 
+import com.google.common.base.Objects;
+
 public class Edge {
 	private final Node leftNode;
 	private final Node rightNode;
@@ -13,6 +15,14 @@ public class Edge {
 	}
 	public Node getRightNode() {
 		return rightNode;
+	}
+	
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this)
+				.addValue(leftNode.getLabel())
+				.addValue(rightNode.getLabel())
+				.toString();
 	}
 	
 }

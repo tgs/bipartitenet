@@ -7,11 +7,13 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 X-AutoStart: true
 Import-Package: com.google.common.base;version="8.0.0",
  com.google.common.collect;version="8.0.0",
+ edu.iu.nwb.util.nwbfile,
  org.cishell.framework;version="1.0.0",
  org.cishell.framework.algorithm;version="1.0.0",
- org.cishell.framework.data;version="1.0.0"
+ org.cishell.framework.data;version="1.0.0",
+ org.cishell.utilities,
+ prefuse.data
 Bundle-ClassPath: xmlgraphics-commons-1.4.jar,
  .,
  javaGeom-0.10.0.jar
 Service-Component: OSGI-INF/component.xml
-Require-Bundle: org.junit
