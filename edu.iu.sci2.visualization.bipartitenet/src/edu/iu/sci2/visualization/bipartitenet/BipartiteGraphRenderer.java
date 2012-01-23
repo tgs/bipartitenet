@@ -15,6 +15,7 @@ import edu.iu.sci2.visualization.bipartitenet.component.CircleRadiusCoding;
 import edu.iu.sci2.visualization.bipartitenet.component.NodeView;
 import edu.iu.sci2.visualization.bipartitenet.component.Paintable;
 import edu.iu.sci2.visualization.bipartitenet.component.PaintableContainer;
+import edu.iu.sci2.visualization.bipartitenet.model.BipartiteGraphDataModel;
 import edu.iu.sci2.visualization.bipartitenet.model.Edge;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 

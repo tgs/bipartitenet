@@ -1,12 +1,10 @@
-package edu.iu.sci2.visualization.bipartitenet;
+package edu.iu.sci2.visualization.bipartitenet.model;
 
 import java.util.Collection;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
-import edu.iu.sci2.visualization.bipartitenet.model.Edge;
-import edu.iu.sci2.visualization.bipartitenet.model.Node;
 
 public class BipartiteGraphDataModel {
 	private final ImmutableList<Node> leftNodes;

@@ -14,6 +14,7 @@ import org.apache.xmlgraphics.java2d.ps.EPSDocumentGraphics2D;
 import com.google.common.collect.ImmutableList;
 
 import edu.iu.sci2.visualization.bipartitenet.component.CanvasContainer;
+import edu.iu.sci2.visualization.bipartitenet.model.BipartiteGraphDataModel;
 import edu.iu.sci2.visualization.bipartitenet.model.Edge;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 
