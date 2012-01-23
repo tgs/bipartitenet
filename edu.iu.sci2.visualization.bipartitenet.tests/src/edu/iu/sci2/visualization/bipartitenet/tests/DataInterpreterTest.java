@@ -23,6 +23,6 @@ public class DataInterpreterTest {
 	@Test
 	public void testModel() {
 		assertNotNull(model);
-		System.out.println(model.toString());
+//		System.out.println(model.toString());
 	}
 }

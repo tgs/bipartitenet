@@ -3,6 +3,7 @@ package edu.iu.sci2.visualization.bipartitenet;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import math.geom2d.Point2D;
 import math.geom2d.line.LineSegment2D;
@@ -42,7 +43,12 @@ public class BipartiteGraphRenderer implements Paintable {
 	}
 	
 	private CircleRadiusCoding makeCircleCoding() {
-		return CircleRadiusCoding.createAreaIdentityCoding();
+		double biggest;
+		List<Node> leftNodes = data.getLeftNodes(),
+				rightNodes = data.getRightNodes();
+		biggest = Math.max(leftNodes.get(0).getValue(),
+				rightNodes.get(0).getValue());
+		return CircleRadiusCoding.createZeroAnchoredScaledCoding(biggest);
 	}
 
 	private void placeEdges() {

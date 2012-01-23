@@ -23,8 +23,8 @@ public class DrawingTest {
 
 	private static BipartiteGraphRenderer createRenderer() {
 		BipartiteGraphRenderer r = new BipartiteGraphRenderer(
-				getTestDataModel(), new LineSegment2D(200, 10, 200, 500),
-				new LineSegment2D(400, 10, 400, 500));
+				getTestDataModel(), new LineSegment2D(200, 100, 200, 500),
+				new LineSegment2D(400, 100, 400, 500));
 		return r;
 	}
 
