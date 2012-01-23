@@ -9,59 +9,17 @@ import math.geom2d.Point2D;
 import math.geom2d.conic.Circle2D;
 import edu.iu.sci2.visualization.bipartitenet.LayoutUtils;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
+import edu.iu.sci2.visualization.bipartitenet.model.NodeDestination;
 
 public class NodeView implements Paintable {
-	public enum Section {
-		LEFT {
-
-			@Override
-			void paintLabel(NodeView nv, Graphics2D g) {
-				TextLayout tl = new TextLayout(nv.getNode().getLabel(),
-						g.getFont(), g.getFontRenderContext());
-				Rectangle2D textBounds = tl.getBounds();
-				double x = nv.getNodeCenter().getX()
-						- nv.getCenterToTextDistance() - textBounds.getWidth();
-				
-				tl.draw(g, (float) x, (float) (nv.getNodeCenter().getY()
-								+ LayoutUtils.getFontCenterHeight(g)));
-			}
-
-			@Override
-			Color getFillColor() {
-				return Color.pink;
-			}
-
-		},
-		RIGHT {
-			@Override
-			void paintLabel(NodeView nv, Graphics2D g) {
-				g.drawString(
-						nv.getNode().getLabel(),
-						(int) nv.getNodeCenter().getX()
-								+ nv.getCenterToTextDistance(),
-						(int) nv.getNodeCenter().getY()
-								+ LayoutUtils.getFontCenterHeight(g));
-			}
-
-			@Override
-			Color getFillColor() {
-				return Color.orange;
-			}
-		};
-
-		abstract void paintLabel(NodeView nv, Graphics2D g);
-		abstract Color getFillColor();
-
-	}
-
 	private final Node node;
 	private final Point2D nodeCenter;
-	private final Section leftRightDifference;
+	private final NodeDestination leftRightDifference;
 	private final CircleRadiusCoding coding;
 	private static final int NODE_TEXT_PADDING = 8;
 	private static final int NODE_MAX_RADIUS = 15;
 
-	public NodeView(Node node, Point2D nodeCenter, Section painter, CircleRadiusCoding coding) {
+	public NodeView(Node node, Point2D nodeCenter, NodeDestination painter, CircleRadiusCoding coding) {
 		super();
 		this.node = node;
 		this.nodeCenter = nodeCenter;
@@ -97,6 +55,10 @@ public class NodeView implements Paintable {
 		circle.fill(g);
 		g.setColor(Color.black);
 		circle.draw(g);
+	}
+
+	public String getLabel() {
+		return getNode().getLabel();
 	}
 
 }

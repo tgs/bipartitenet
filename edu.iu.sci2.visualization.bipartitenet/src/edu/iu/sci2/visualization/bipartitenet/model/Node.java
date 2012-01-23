@@ -4,14 +4,16 @@ import com.google.common.base.Objects;
 
 public class Node {
 	private final double radius;
+	private final NodeDestination destination;
 
 	private final String label;
 
-	public Node(String label, double radius) {
+	public Node(String label, double radius, NodeDestination destination) {
 		super();
 		if (label == null) {
 			throw new NullPointerException("Label must not be null");
 		}
+		this.destination = destination;
 		this.label = label;
 		this.radius = radius;
 	}
@@ -30,5 +32,9 @@ public class Node {
 				.add("label", label)
 				.add("radius", radius)
 				.toString();
+	}
+
+	public NodeDestination getDestination() {
+		return destination;
 	}
 }

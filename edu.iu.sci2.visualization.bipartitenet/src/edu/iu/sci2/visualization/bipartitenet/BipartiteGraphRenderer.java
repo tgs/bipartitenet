@@ -18,6 +18,7 @@ import edu.iu.sci2.visualization.bipartitenet.component.PaintableContainer;
 import edu.iu.sci2.visualization.bipartitenet.model.BipartiteGraphDataModel;
 import edu.iu.sci2.visualization.bipartitenet.model.Edge;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
+import edu.iu.sci2.visualization.bipartitenet.model.NodeDestination;
 
 public class BipartiteGraphRenderer implements Paintable {
 	private final BipartiteGraphDataModel data;
@@ -55,8 +56,8 @@ public class BipartiteGraphRenderer implements Paintable {
 
 	private LinkedHashMap<Node, NodeView> placeNodes() {
 		LinkedHashMap<Node,NodeView> nodeViews = Maps.newLinkedHashMap();
-		nodeViews.putAll(placeNodesOnLine(data.getRightNodes(), getRightLine(), NodeView.Section.RIGHT));
-		nodeViews.putAll(placeNodesOnLine(data.getLeftNodes(), getLeftLine(), NodeView.Section.LEFT));
+		nodeViews.putAll(placeNodesOnLine(data.getRightNodes(), getRightLine(), NodeDestination.RIGHT));
+		nodeViews.putAll(placeNodesOnLine(data.getLeftNodes(), getLeftLine(), NodeDestination.LEFT));
 		
 		for (NodeView nv : nodeViews.values()) {
 			painter.add(nv);
@@ -66,7 +67,7 @@ public class BipartiteGraphRenderer implements Paintable {
 	}
 
 	private LinkedHashMap<Node, NodeView> placeNodesOnLine(ImmutableList<Node> nodes,
-			LineSegment2D centerLine, NodeView.Section painter) {
+			LineSegment2D centerLine, NodeDestination painter) {
 		LinkedHashMap<Node,NodeView> nodeViews = Maps.newLinkedHashMap();
 		int numNodes = nodes.size();
 		double denominator = Math.max(1, numNodes - 1); // don't divide by 0!

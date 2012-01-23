@@ -1,8 +1,10 @@
 package edu.iu.sci2.visualization.bipartitenet.model;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 
@@ -20,10 +22,18 @@ public class BipartiteGraphDataModel {
 		}
 	};
 
-	public BipartiteGraphDataModel(Collection<Node> leftNodes, 
-			Collection<Node> rightNodes, 
+	public BipartiteGraphDataModel(Collection<Node> allNodes,
 			Collection<Edge> edges) {
-		super();
+		List<Node> leftNodes = Lists.newArrayList(),
+				rightNodes = Lists.newArrayList();
+		for (Node n : allNodes) {
+			if (n.getDestination() == NodeDestination.LEFT) {
+				leftNodes.add(n);
+			} else {
+				rightNodes.add(n);
+			}
+		}
+		
 		this.leftNodes = ImmutableList.copyOf(orderingByRadius.sortedCopy(leftNodes));
 		this.rightNodes = ImmutableList.copyOf(orderingByRadius.sortedCopy(rightNodes));
 		this.edges = ImmutableList.copyOf(edges);

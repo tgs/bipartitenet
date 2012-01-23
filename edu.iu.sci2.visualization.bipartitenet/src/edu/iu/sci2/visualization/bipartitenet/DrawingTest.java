@@ -17,6 +17,7 @@ import edu.iu.sci2.visualization.bipartitenet.component.CanvasContainer;
 import edu.iu.sci2.visualization.bipartitenet.model.BipartiteGraphDataModel;
 import edu.iu.sci2.visualization.bipartitenet.model.Edge;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
+import edu.iu.sci2.visualization.bipartitenet.model.NodeDestination;
 
 public class DrawingTest {
 
@@ -29,11 +30,10 @@ public class DrawingTest {
 
 	private static BipartiteGraphDataModel getTestDataModel() {
 		Node cheez = new Node(
-				"Cheezburger", 75);
-		Node llama = new Node("Llama", 25);
-		Node cat = new Node("Cat", 50);
-		return new BipartiteGraphDataModel(ImmutableList.of(cheez), 
-				ImmutableList.of(llama, cat),
+				"Cheezburger", 75, NodeDestination.LEFT);
+		Node llama = new Node("Llama", 25, NodeDestination.RIGHT);
+		Node cat = new Node("Cat", 50, NodeDestination.RIGHT);
+		return new BipartiteGraphDataModel(ImmutableList.of(cheez, llama, cat),
 				ImmutableList.of(new Edge(cheez, llama), new Edge(cheez, cat)));
 	}
 
