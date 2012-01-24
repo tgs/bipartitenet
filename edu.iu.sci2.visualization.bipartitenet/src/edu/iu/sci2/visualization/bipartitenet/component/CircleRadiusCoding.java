@@ -22,16 +22,15 @@ public class CircleRadiusCoding implements Function<Double, Double> {
 		return createWithSlopeAndIntercept(1, 0);
 	}
 	
-	public static CircleRadiusCoding createZeroAnchoredScaledCoding(double max) {
-		return createAutoScaledCoding(0, max);
+	public static CircleRadiusCoding createZeroAnchoredScaledCoding(double max, double maxRadius) {
+		return createAutoScaledCoding(0, max, maxRadius);
 	}
 	
-	public static CircleRadiusCoding createAutoScaledCoding(double min, double max) {
+	public static CircleRadiusCoding createAutoScaledCoding(double min, double max, double maxRadius) {
 		if (Math.abs(min - max) < 0.00000001) {
 			// if min == max, just make the dots some size and don't worry.
 			return createWithSlopeAndIntercept(0, 10);
 		}
-		int maxRadius = 15;
 		double maxArea = Math.PI * maxRadius * maxRadius;
 		double minArea = 1;
 		double slope = (maxArea - minArea) / (max - min);

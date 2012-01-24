@@ -25,11 +25,11 @@ public class BasicRunner {
 		
 		JFrame f = new JFrame("Application Review");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(600, 600);
+		f.setSize(800, 800);
 		CanvasContainer cc = new CanvasContainer();
 		BipartiteGraphRenderer r = new BipartiteGraphRenderer(
-				model, new LineSegment2D(200, 100, 200, 500),
-				new LineSegment2D(400, 100, 400, 500));
+				model, new LineSegment2D(300, 100, 300, 500),
+				new LineSegment2D(500, 100, 500, 500));
 		cc.add(r);
 		f.getContentPane().add(cc);
 		f.setVisible(true);
