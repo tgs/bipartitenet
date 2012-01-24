@@ -2,10 +2,10 @@ package edu.iu.sci2.visualization.bipartitenet.model;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.font.LineMetrics;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 
-import edu.iu.sci2.visualization.bipartitenet.LayoutUtils;
 import edu.iu.sci2.visualization.bipartitenet.component.NodeView;
 
 public enum NodeDestination {
@@ -21,7 +21,7 @@ public enum NodeDestination {
 					- nv.getCenterToTextDistance() - textBounds.getWidth();
 			
 			tl.draw(g, (float) x, (float) (nv.getNodeCenter().getY()
-							+ LayoutUtils.getFontCenterHeight(g)));
+							+ getFontCenterHeight(g)));
 		}
 
 		@Override
@@ -40,7 +40,7 @@ public enum NodeDestination {
 					(int) nv.getNodeCenter().getX()
 							+ nv.getCenterToTextDistance(),
 					(int) nv.getNodeCenter().getY()
-							+ LayoutUtils.getFontCenterHeight(g));
+							+ getFontCenterHeight(g));
 		}
 
 		@Override
@@ -52,4 +52,10 @@ public enum NodeDestination {
 
 	public abstract void paintLabel(NodeView nv, Graphics2D g);
 	public abstract Color getFillColor();
+	
+	private static float getFontCenterHeight(Graphics2D g) {
+		 LineMetrics lm = g.getFont().getLineMetrics("Asdf", g.getFontRenderContext());
+		 
+		 return lm.getAscent() / 2;
+	}
 }

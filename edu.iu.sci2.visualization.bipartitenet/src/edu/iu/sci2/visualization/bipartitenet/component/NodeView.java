@@ -2,12 +2,9 @@ package edu.iu.sci2.visualization.bipartitenet.component;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.font.TextLayout;
-import java.awt.geom.Rectangle2D;
 
 import math.geom2d.Point2D;
 import math.geom2d.conic.Circle2D;
-import edu.iu.sci2.visualization.bipartitenet.LayoutUtils;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 import edu.iu.sci2.visualization.bipartitenet.model.NodeDestination;
 
