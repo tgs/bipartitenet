@@ -21,15 +21,30 @@ import edu.iu.sci2.visualization.bipartitenet.model.NWBDataImporter;
 
 public class BipartiteNetAlgorithm implements Algorithm {
 
+	private final NWBDataImporter importer;
+	private final File nwbFile;
+
 	public BipartiteNetAlgorithm(File nwbFile, String nodeSizeColumn,
-			String leftSideType) throws FileNotFoundException, IOException,
-			ParsingException {
-		NWBDataImporter importer = new NWBDataImporter("bipartitetype",
+			String leftSideType) {
+		importer = new NWBDataImporter("bipartitetype",
 				leftSideType, nodeSizeColumn);
-		BipartiteGraphDataModel model = importer
-				.constructModelFromFile(new FileInputStream(nwbFile));
+		this.nwbFile = nwbFile;
 		
-		// XXX this should be in .execute() below!
+	}
+
+	@Override
+	public Data[] execute() throws AlgorithmExecutionException {
+		BipartiteGraphDataModel model;
+		try {
+			model = importer
+					.constructModelFromFile(new FileInputStream(nwbFile));
+		} catch (FileNotFoundException e) {
+			throw new AlgorithmExecutionException(e);
+		} catch (IOException e) {
+			throw new AlgorithmExecutionException(e);
+		} catch (ParsingException e) {
+			throw new AlgorithmExecutionException(e);
+		}
 		
 		JFrame f = new JFrame("Bipartite Network Graph");
 		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -41,10 +56,6 @@ public class BipartiteNetAlgorithm implements Algorithm {
 		cc.add(r);
 		f.getContentPane().add(cc);
 		f.setVisible(true);
-	}
-
-	@Override
-	public Data[] execute() throws AlgorithmExecutionException {
 		return new Data[] {};
 	}
 

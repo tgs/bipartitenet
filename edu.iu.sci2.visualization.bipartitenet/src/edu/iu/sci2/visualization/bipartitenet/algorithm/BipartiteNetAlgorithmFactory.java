@@ -30,17 +30,9 @@ public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
 	@Override
 	public Algorithm createAlgorithm(Data[] data,
 			Dictionary<String, Object> parameters, CIShellContext ciShellContext) {
-		try {
-			return new BipartiteNetAlgorithm(getNWBFile(data),
-					(String) parameters.get(NODE_SIZE_COLUMN_ID),
-					(String) parameters.get(LEFT_SIDE_TYPE_ID));
-		} catch (FileNotFoundException e) {
-			throw new AlgorithmCreationFailedException(e);
-		} catch (IOException e) {
-			throw new AlgorithmCreationFailedException(e);
-		} catch (ParsingException e) {
-			throw new AlgorithmCreationFailedException(e);
-		}
+		return new BipartiteNetAlgorithm(getNWBFile(data),
+				(String) parameters.get(NODE_SIZE_COLUMN_ID),
+				(String) parameters.get(LEFT_SIDE_TYPE_ID));
 	}
 
 	@Override
