@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 
 import math.geom2d.Point2D;
 import math.geom2d.conic.Circle2D;
+import edu.iu.sci2.visualization.bipartitenet.PageDirector;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 import edu.iu.sci2.visualization.bipartitenet.model.NodeDestination;
 
@@ -14,7 +15,6 @@ public class NodeView implements Paintable {
 	private final NodeDestination leftRightDifference;
 	private final CircleRadiusCoding coding;
 	private static final int NODE_TEXT_PADDING = 8;
-	private static final int NODE_MAX_RADIUS = 15;
 
 	public NodeView(Node node, Point2D nodeCenter, NodeDestination painter, CircleRadiusCoding coding) {
 		super();
@@ -29,7 +29,7 @@ public class NodeView implements Paintable {
 	}
 
 	public int getMaxRadius() {
-		return NODE_MAX_RADIUS;
+		return PageDirector.MAX_RADIUS;
 	}
 
 	private Node getNode() {

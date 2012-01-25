@@ -21,7 +21,8 @@ public class PageDirector implements Paintable {
 
 	public static final int PAGE_HEIGHT = 800;
 	public static final int PAGE_WIDTH = 800;
-	private static final double MAX_RADIUS = 15;
+	// TODO: a better place for this to live?
+	public static final int MAX_RADIUS = 15;
 
 	private static final LineSegment2D LEFT_LINE = new LineSegment2D(300, 100,
 			300, 500);
