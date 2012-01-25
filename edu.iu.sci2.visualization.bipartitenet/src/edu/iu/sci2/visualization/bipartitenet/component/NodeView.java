@@ -14,7 +14,7 @@ public class NodeView implements Paintable {
 	private final Point2D nodeCenter;
 	private final NodeDestination leftRightDifference;
 	private final CircleRadiusCoding coding;
-	private static final int NODE_TEXT_PADDING = 8;
+	public static final int NODE_TEXT_PADDING = 8;
 
 	public NodeView(Node node, Point2D nodeCenter, NodeDestination painter, CircleRadiusCoding coding) {
 		super();

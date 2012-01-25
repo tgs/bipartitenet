@@ -30,11 +30,15 @@ public class BipartiteNetAlgorithm implements Algorithm {
 	private final NWBDataImporter importer;
 	private final File nwbFile;
 	private final Data parentData;
-	private LogService log;
+	private final LogService log;
+	private final String leftSideType;
+	private final String rightSideType;
 
 	public BipartiteNetAlgorithm(Data parentData, File nwbFile, String nodeSizeColumn,
-			String leftSideType, LogService log) {
+			String leftSideType, String rightSideType, LogService log) {
 		this.parentData = parentData;
+		this.leftSideType = leftSideType;
+		this.rightSideType = rightSideType;
 		importer = new NWBDataImporter("bipartitetype",
 				leftSideType, nodeSizeColumn, log);
 		this.nwbFile = nwbFile;
@@ -62,7 +66,7 @@ public class BipartiteNetAlgorithm implements Algorithm {
 		g.fillRect(0, 0, img.getWidth(), img.getHeight());
 		g.setPaint(Color.black);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		PageDirector r = new PageDirector(model);
+		PageDirector r = new PageDirector(model, leftSideType, rightSideType);
 		r.paint(g);
 		try {
 			File outFile = FileUtilities.createTemporaryFileInDefaultTemporaryDirectory("BipartiteGraph", "png");

@@ -2,6 +2,7 @@ package edu.iu.sci2.visualization.bipartitenet.algorithm;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,21 +25,29 @@ public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
 		ParameterMutator {
 	private static final String LEFT_SIDE_TYPE_ID = "leftSideType";
 	private static final String NODE_SIZE_COLUMN_ID = "nodeSizeColumn";
-
+	
+	private NWBFileExaminer examiner;
+	
 	@Override
 	public Algorithm createAlgorithm(Data[] data,
 			Dictionary<String, Object> parameters, CIShellContext ciShellContext) {
 		LogService log = (LogService) ciShellContext.getService(LogService.class.getName());
 		
+		List<String> types = new ArrayList<String>(examiner.getBipartiteTypes());
+		String leftSideType = (String) parameters.get(LEFT_SIDE_TYPE_ID);
+		types.remove(leftSideType);
+		String rightSideType = types.get(0);
+		
+		
 		return new BipartiteNetAlgorithm(data[0], getNWBFile(data),
 				(String) parameters.get(NODE_SIZE_COLUMN_ID),
-				(String) parameters.get(LEFT_SIDE_TYPE_ID), log);
+				leftSideType, rightSideType, log);
 	}
 
 	@Override
 	public ObjectClassDefinition mutateParameters(Data[] data,
 			ObjectClassDefinition oldParameters) {
-		NWBFileExaminer examiner = new NWBFileExaminer();
+		examiner = new NWBFileExaminer();
 		File nwbFile = getNWBFile(data);
 
 		try {

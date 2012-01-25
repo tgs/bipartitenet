@@ -1,6 +1,6 @@
 *Nodes
-id*int label*string  totaldesirability*int bipartitetype*string
-1	"Applicant's Proposal" 1 "Who"
+id*int label*string  Desirability*int bipartitetype*string
+1	"Applicant (proposed)" 1 "Who"
 2	"Kiss My Red Ruby Lips" 5 "What"
 3	"Shoe My Pretty Little Feet" 10 "What"
 4	"Glove My Hand" 9 "What"

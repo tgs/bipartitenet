@@ -1,5 +1,6 @@
 package edu.iu.sci2.visualization.bipartitenet;
 
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.List;
 
@@ -28,11 +29,19 @@ public class PageDirector implements Paintable {
 			300, 500);
 	private static final LineSegment2D RIGHT_LINE = new LineSegment2D(500, 100,
 			500, 500);
+	
+	private static final Font TITLE_FONT = new Font("Dialog", Font.BOLD, 16);
 
 	private static final Point2D CIRCLE_LEGEND_POSITION = new Point2D(250, 600);
+	private static final Point2D LEFT_TITLE_POSITION = LEFT_LINE.getFirstPoint().translate(MAX_RADIUS, -50);
+	private static final Point2D RIGHT_TITLE_POSITION = RIGHT_LINE.getFirstPoint().translate(- MAX_RADIUS, -50);
+//	private final String leftSideType;
+//	private final String rightSideType;
 
-	public PageDirector(BipartiteGraphDataModel dataModel) {
+	public PageDirector(final BipartiteGraphDataModel dataModel, final String leftSideType, final String rightSideType) {
 		this.dataModel = dataModel;
+//		this.leftSideType = leftSideType;
+//		this.rightSideType = rightSideType;
 
 		CircleRadiusCoding coding = makeCircleCoding();
 		ImmutableMap<Double, String> legendLabels = chooseLegendLabels();
@@ -41,6 +50,15 @@ public class PageDirector implements Paintable {
 		BipartiteGraphRenderer renderer = new BipartiteGraphRenderer(dataModel,
 				LEFT_LINE, RIGHT_LINE, coding);
 		painter.add(renderer);
+		
+		painter.add(new RightAlignedLabel(LEFT_TITLE_POSITION, leftSideType, TITLE_FONT));
+		painter.add(new Paintable() {
+			@Override
+			public void paint(Graphics2D g) {
+				g.setFont(TITLE_FONT);
+				g.drawString(rightSideType, (float) RIGHT_TITLE_POSITION.getX(), (float) RIGHT_TITLE_POSITION.getY());
+			}
+		});
 	}
 
 	private ImmutableMap<Double, String> chooseLegendLabels() {

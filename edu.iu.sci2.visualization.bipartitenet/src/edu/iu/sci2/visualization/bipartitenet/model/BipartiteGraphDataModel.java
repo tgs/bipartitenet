@@ -10,7 +10,7 @@ import com.google.common.collect.Ordering;
 
 
 public class BipartiteGraphDataModel {
-	private final String nodeValueAttribute; 
+	private final String nodeValueAttribute;
 	private final ImmutableList<Node> leftNodes;
 	private final ImmutableList<Node> rightNodes;
 	
@@ -66,4 +66,5 @@ public class BipartiteGraphDataModel {
 	public String getNodeValueAttribute() {
 		return nodeValueAttribute;
 	}
+
 }

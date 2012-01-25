@@ -24,7 +24,7 @@ public class BasicRunner {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException, ParsingException {
-		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "Who", "totaldesirability");
+		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "Who", "Desirability");
 		BipartiteGraphDataModel model = importer.constructModelFromFile(BasicRunner.class.getResourceAsStream("test-network.nwb"));
 		
 		renderOnScreen(model);
@@ -38,7 +38,7 @@ public class BasicRunner {
 		g.fillRect(0, 0, img.getWidth(), img.getHeight());
 		g.setPaint(Color.black);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		PageDirector r = new PageDirector(model);
+		PageDirector r = new PageDirector(model, "Who", "What");
 		r.paint(g);
 		ImageIO.write(img, "PNG", new File("BLAH.png"));
 	}
@@ -48,7 +48,7 @@ public class BasicRunner {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setSize(PageDirector.PAGE_WIDTH, PageDirector.PAGE_HEIGHT);
 		CanvasContainer cc = new CanvasContainer();
-		PageDirector r = new PageDirector(model);
+		PageDirector r = new PageDirector(model, "Who", "What");
 		cc.add(r);
 		f.getContentPane().add(cc);
 		f.setVisible(true);
