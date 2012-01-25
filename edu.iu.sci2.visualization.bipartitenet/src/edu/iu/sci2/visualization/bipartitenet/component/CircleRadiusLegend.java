@@ -10,7 +10,6 @@ import math.geom2d.Point2D;
 import math.geom2d.conic.Circle2D;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Ordering;
 
 public class CircleRadiusLegend implements Paintable {
 	private final CircleRadiusCoding coding;
@@ -20,7 +19,7 @@ public class CircleRadiusLegend implements Paintable {
 	private final double maxRadius;
 	
 	private static final Font TITLE_FONT = new Font("Dialog", Font.BOLD, 14);
-	private static final Font LEGEND_FONT = new Font("Dialog", Font.PLAIN, 8);
+	private static final Font LEGEND_FONT = new Font("Dialog", Font.PLAIN, 10);
 	
 	private static final int LABEL_X_OFFSET = 5; // from outer edge of circles to the labels
 	private static final int LEGEND_Y_OFFSET = 20; // from top of label to top of circles
@@ -63,6 +62,7 @@ public class CircleRadiusLegend implements Paintable {
 			// label position
 			double labelX = legendTopCenter.getX() + LABEL_X_OFFSET,
 					labelY = circleY - radius;
+			g.setFont(LEGEND_FONT);
 			g.drawString(labeledValue.getValue(), (float) labelX, (float) labelY);
 			
 		}
