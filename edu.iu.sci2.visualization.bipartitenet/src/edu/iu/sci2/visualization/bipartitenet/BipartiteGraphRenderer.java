@@ -2,12 +2,6 @@ package edu.iu.sci2.visualization.bipartitenet;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
-import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
 import java.util.LinkedHashMap;
 
 import math.geom2d.Point2D;
@@ -18,7 +12,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import edu.iu.sci2.visualization.bipartitenet.component.CircleRadiusCoding;
-import edu.iu.sci2.visualization.bipartitenet.component.CircleRadiusLegend;
 import edu.iu.sci2.visualization.bipartitenet.component.EdgeView;
 import edu.iu.sci2.visualization.bipartitenet.component.NodeView;
 import edu.iu.sci2.visualization.bipartitenet.component.Paintable;

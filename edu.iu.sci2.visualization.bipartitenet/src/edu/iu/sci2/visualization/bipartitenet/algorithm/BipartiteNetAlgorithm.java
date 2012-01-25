@@ -11,9 +11,6 @@ import java.io.IOException;
 import java.util.Dictionary;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-
-import math.geom2d.line.LineSegment2D;
 
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
@@ -23,9 +20,7 @@ import org.cishell.framework.data.DataProperty;
 import org.cishell.utilities.FileUtilities;
 
 import edu.iu.nwb.util.nwbfile.ParsingException;
-import edu.iu.sci2.visualization.bipartitenet.BipartiteGraphRenderer;
 import edu.iu.sci2.visualization.bipartitenet.PageDirector;
-import edu.iu.sci2.visualization.bipartitenet.component.CanvasContainer;
 import edu.iu.sci2.visualization.bipartitenet.model.BipartiteGraphDataModel;
 import edu.iu.sci2.visualization.bipartitenet.model.NWBDataImporter;
 
