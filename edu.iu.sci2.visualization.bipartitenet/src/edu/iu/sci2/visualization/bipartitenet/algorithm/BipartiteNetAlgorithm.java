@@ -30,7 +30,6 @@ public class BipartiteNetAlgorithm implements Algorithm {
 	private final NWBDataImporter importer;
 	private final File nwbFile;
 	private final Data parentData;
-	private final LogService log;
 	private final String leftSideType;
 	private final String rightSideType;
 
@@ -42,8 +41,6 @@ public class BipartiteNetAlgorithm implements Algorithm {
 		importer = new NWBDataImporter("bipartitetype",
 				leftSideType, nodeSizeColumn, log);
 		this.nwbFile = nwbFile;
-		this.log = log;
-		
 	}
 
 	@Override

@@ -101,7 +101,16 @@ public class NWBDataImporter {
 
 		@Override
 		public void setNodeSchema(LinkedHashMap<String, String> schema) {
-			// TODO Check schema for consistency with data types and stuff
+			if (! schema.containsKey(getNodeSizeCol())) {
+				throw new IllegalArgumentException(
+						String.format("Node schema should contain attribute %s (for node size), but does not.",
+								getNodeSizeCol()));
+			}
+			if (! schema.containsKey(getNodeTypeCol())) {
+				throw new IllegalArgumentException(
+						String.format("Node schema should contain attribute %s (for node type), but does not.",
+								getNodeTypeCol()));
+			}
 		}
 
 		@Override
