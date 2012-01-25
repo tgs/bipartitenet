@@ -22,6 +22,8 @@ public class NWBDataImporter {
 		private Map<Integer, Node> nodeById = Maps.newHashMap();
 		private List<Node> allNodes = Lists.newArrayList();
 		private List<Edge> edges = Lists.newArrayList();
+		private boolean gotAnyLeftNodes = false;
+		private boolean gotAnyRightNodes = false;
 
 		@Override
 		public void addComment(String comment) {
@@ -38,7 +40,14 @@ public class NWBDataImporter {
 		public void addNode(int id, String label, Map<String, Object> attributes) {
 			Double weight = NumberUtilities.interpretObjectAsDouble(attributes.get(getNodeSizeCol()));
 			String type = (String) attributes.get(getNodeTypeCol());
-			NodeDestination dest = getTypeThatIsLeft().equalsIgnoreCase(type) ? NodeDestination.LEFT : NodeDestination.RIGHT;
+			NodeDestination dest;
+			if (getTypeThatIsLeft().equalsIgnoreCase(type)) {
+				dest = NodeDestination.LEFT;
+				gotAnyLeftNodes = true;
+			} else {
+				dest = NodeDestination.RIGHT;
+				gotAnyRightNodes = true;
+			}
 			
 			Node nodeObj = new Node(label,
 					weight, dest);
@@ -104,6 +113,12 @@ public class NWBDataImporter {
 		}
 
 		public BipartiteGraphDataModel constructGraphDataModel() {
+			if (! gotAnyLeftNodes) {
+				log(LogService.LOG_WARNING, "Supposedly bipartite graph has no left-hand nodes");
+			}
+			if (! gotAnyRightNodes) {
+				log(LogService.LOG_WARNING, "Supposedly bipartite graph has no right-hand nodes");
+			}
 			return new BipartiteGraphDataModel(allNodes, edges, getNodeSizeCol());
 		}
 
