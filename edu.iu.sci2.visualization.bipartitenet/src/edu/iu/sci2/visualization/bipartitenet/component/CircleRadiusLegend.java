@@ -22,7 +22,7 @@ public class CircleRadiusLegend implements Paintable {
 	private static final Font LEGEND_FONT = new Font("Dialog", Font.PLAIN, 10);
 	
 	private static final int LABEL_X_OFFSET = 5; // from outer edge of circles to the labels
-	private static final int LEGEND_Y_OFFSET = 20; // from top of label to top of circles
+	private static final int LEGEND_Y_OFFSET = 25; // from top of label to top of circles
 	
 	
 	public CircleRadiusLegend(Point2D topCenter, String title,
