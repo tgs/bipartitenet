@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.cishell.utilities.NumberUtilities;
+import org.osgi.service.log.LogService;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -35,8 +36,6 @@ public class NWBDataImporter {
 
 		@Override
 		public void addNode(int id, String label, Map<String, Object> attributes) {
-			
-			
 			Double weight = NumberUtilities.interpretObjectAsDouble(attributes.get(getNodeSizeCol()));
 			String type = (String) attributes.get(getNodeTypeCol());
 			NodeDestination dest = getTypeThatIsLeft().equalsIgnoreCase(type) ? NodeDestination.LEFT : NodeDestination.RIGHT;
@@ -52,7 +51,7 @@ public class NWBDataImporter {
 				Map<String, Object> attributes) {
 			Node left, right, something;
 			something = nodeById.get(node1);
-			// TODO check for consistency
+			
 			if (something.getDestination() == NodeDestination.LEFT) {
 				left = something;
 				right = nodeById.get(node2);
@@ -61,8 +60,12 @@ public class NWBDataImporter {
 				right = something;
 			}
 			
-			edges.add(new Edge(left, right));
+			if (left.getDestination() == right.getDestination()) {
+				log(LogService.LOG_WARNING, String.format("Graph is not properly bipartite: %s and %s are linked but are on the same side!",
+						left, right));
+			}
 			
+			edges.add(new Edge(left, right));
 		}
 
 		@Override
@@ -107,16 +110,29 @@ public class NWBDataImporter {
 	}
 
 	private final String nodeTypeCol;
-
 	private final String nodeSizeCol;
-
 	private final String typeThatIsLeft;
+	LogService log = null;
 
 	public NWBDataImporter(String nodeTypeCol, String typeThatIsLeft,
 			String nodeSizeCol) {
 		this.nodeTypeCol = nodeTypeCol;
 		this.typeThatIsLeft = typeThatIsLeft;
 		this.nodeSizeCol = nodeSizeCol;
+	}
+	
+	public void log(int level, String message) {
+		if (log != null) {
+			log.log(level, message);
+		}
+	}
+
+	public NWBDataImporter(String nodeTypeCol, String typeThatIsLeft,
+			String nodeSizeCol, LogService log) {
+		this.nodeTypeCol = nodeTypeCol;
+		this.typeThatIsLeft = typeThatIsLeft;
+		this.nodeSizeCol = nodeSizeCol;
+		this.log = log;
 	}
 
 	public BipartiteGraphDataModel constructModelFromFile(InputStream nwbData)

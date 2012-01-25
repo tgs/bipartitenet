@@ -18,6 +18,7 @@ import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.cishell.utilities.FileUtilities;
+import org.osgi.service.log.LogService;
 
 import edu.iu.nwb.util.nwbfile.ParsingException;
 import edu.iu.sci2.visualization.bipartitenet.PageDirector;
@@ -29,13 +30,15 @@ public class BipartiteNetAlgorithm implements Algorithm {
 	private final NWBDataImporter importer;
 	private final File nwbFile;
 	private final Data parentData;
+	private LogService log;
 
 	public BipartiteNetAlgorithm(Data parentData, File nwbFile, String nodeSizeColumn,
-			String leftSideType) {
+			String leftSideType, LogService log) {
 		this.parentData = parentData;
 		importer = new NWBDataImporter("bipartitetype",
-				leftSideType, nodeSizeColumn);
+				leftSideType, nodeSizeColumn, log);
 		this.nwbFile = nwbFile;
+		this.log = log;
 		
 	}
 

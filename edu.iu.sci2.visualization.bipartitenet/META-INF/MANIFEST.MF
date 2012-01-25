@@ -13,6 +13,7 @@ Import-Package: com.google.common.base;version="8.0.0",
  org.cishell.framework.data;version="1.0.0",
  org.cishell.utilities,
  org.cishell.utilities.mutateParameter.dropdown,
+ org.osgi.service.log,
  org.osgi.service.metatype;version="1.1.0",
  prefuse.data
 Bundle-ClassPath: xmlgraphics-commons-1.4.jar,

@@ -13,6 +13,7 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.ParameterMutator;
 import org.cishell.framework.data.Data;
 import org.cishell.utilities.mutateParameter.dropdown.DropdownMutator;
+import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 import edu.iu.nwb.util.nwbfile.NWBFileParser;
@@ -27,9 +28,11 @@ public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
 	@Override
 	public Algorithm createAlgorithm(Data[] data,
 			Dictionary<String, Object> parameters, CIShellContext ciShellContext) {
+		LogService log = (LogService) ciShellContext.getService(LogService.class.getName());
+		
 		return new BipartiteNetAlgorithm(data[0], getNWBFile(data),
 				(String) parameters.get(NODE_SIZE_COLUMN_ID),
-				(String) parameters.get(LEFT_SIDE_TYPE_ID));
+				(String) parameters.get(LEFT_SIDE_TYPE_ID), log);
 	}
 
 	@Override
