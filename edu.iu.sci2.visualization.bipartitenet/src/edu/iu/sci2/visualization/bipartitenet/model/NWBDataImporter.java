@@ -101,7 +101,7 @@ public class NWBDataImporter {
 		}
 
 		public BipartiteGraphDataModel constructGraphDataModel() {
-			return new BipartiteGraphDataModel(allNodes, edges);
+			return new BipartiteGraphDataModel(allNodes, edges, getNodeSizeCol());
 		}
 
 	}

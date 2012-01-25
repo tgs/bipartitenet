@@ -15,6 +15,7 @@ import org.cishell.framework.data.Data;
 
 import edu.iu.nwb.util.nwbfile.ParsingException;
 import edu.iu.sci2.visualization.bipartitenet.BipartiteGraphRenderer;
+import edu.iu.sci2.visualization.bipartitenet.PageDirector;
 import edu.iu.sci2.visualization.bipartitenet.component.CanvasContainer;
 import edu.iu.sci2.visualization.bipartitenet.model.BipartiteGraphDataModel;
 import edu.iu.sci2.visualization.bipartitenet.model.NWBDataImporter;
@@ -50,9 +51,7 @@ public class BipartiteNetAlgorithm implements Algorithm {
 		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		f.setSize(600, 600);
 		CanvasContainer cc = new CanvasContainer();
-		BipartiteGraphRenderer r = new BipartiteGraphRenderer(
-				model, new LineSegment2D(200, 100, 200, 500),
-				new LineSegment2D(400, 100, 400, 500));
+		PageDirector r = new PageDirector(model);
 		cc.add(r);
 		f.getContentPane().add(cc);
 		f.setVisible(true);

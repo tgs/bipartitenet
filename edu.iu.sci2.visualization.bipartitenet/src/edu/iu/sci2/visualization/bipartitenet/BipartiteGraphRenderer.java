@@ -9,7 +9,6 @@ import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import math.geom2d.Point2D;
 import math.geom2d.line.LineSegment2D;
@@ -30,7 +29,7 @@ import edu.iu.sci2.visualization.bipartitenet.model.Node;
 import edu.iu.sci2.visualization.bipartitenet.model.NodeDestination;
 
 public class BipartiteGraphRenderer implements Paintable {
-	private static final double MAX_RADIUS = 15;
+	
 	private final BipartiteGraphDataModel data;
 	private ImmutableMap<Node, NodeView> nodeToNodeView;
 	
@@ -41,35 +40,19 @@ public class BipartiteGraphRenderer implements Paintable {
 	private final LineSegment2D rightLine;
 	private CircleRadiusCoding nodeRadiusCoding;
 
-	public BipartiteGraphRenderer(BipartiteGraphDataModel skel, LineSegment2D leftLine, LineSegment2D rightLine) {
+	public BipartiteGraphRenderer(BipartiteGraphDataModel skel, LineSegment2D leftLine, LineSegment2D rightLine, CircleRadiusCoding nodeRadiusCoding) {
 		this.data = skel;
 		this.leftLine = leftLine;
 		this.rightLine = rightLine;
-		this.nodeRadiusCoding = makeCircleCoding();
+		this.nodeRadiusCoding = nodeRadiusCoding;
 		
 		nodeToNodeView = ImmutableMap.copyOf(placeNodes());
 		placeEdges();
 		
 		
-		placeLegends();
 	}
 	
-	private void placeLegends() {
-		final Point2D topCenter = leftLine.getLastPoint().translate(0, 50);
-		painter.add(new Paintable() {
-
-			@Override
-			public void paint(Graphics2D g) {
-				topCenter.draw(g, 1);
-			}
-			
-		});
-		CircleRadiusLegend legend = new CircleRadiusLegend(topCenter,
-				"Number of Alpacas", nodeRadiusCoding, 
-				ImmutableMap.of(3.0, "Several", 5.0, "Some", 9.0, "Many"), MAX_RADIUS);
-		painter.add(legend);
-	}
-
+	
 //	private void doTestStuff(Graphics2D g) {
 //		System.err.println(g.getFont().getFontName());
 //		GlyphVector vec = g.getFont().createGlyphVector(g.getFontRenderContext(), "I am a banana!");
@@ -79,15 +62,6 @@ public class BipartiteGraphRenderer implements Paintable {
 //		path.transform(AffineTransform.getTranslateInstance(10, 15));
 //		g.draw(path);
 //	}
-
-	private CircleRadiusCoding makeCircleCoding() {
-		double biggest;
-		List<Node> leftNodes = data.getLeftNodes(),
-				rightNodes = data.getRightNodes();
-		biggest = Math.max(leftNodes.get(0).getValue(),
-				rightNodes.get(0).getValue());
-		return CircleRadiusCoding.createZeroAnchoredScaledCoding(biggest, MAX_RADIUS);
-	}
 
 	private void placeEdges() {
 		for (Edge e : data.getEdges()) {
