@@ -1,7 +1,6 @@
 package edu.iu.sci2.visualization.bipartitenet.algorithm;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.LinkedHashMap;
@@ -16,8 +15,6 @@ import org.cishell.framework.data.Data;
 import org.cishell.utilities.mutateParameter.dropdown.DropdownMutator;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
-import com.google.common.collect.Lists;
-
 import edu.iu.nwb.util.nwbfile.NWBFileParser;
 import edu.iu.nwb.util.nwbfile.NWBFileUtilities;
 import edu.iu.nwb.util.nwbfile.ParsingException;
@@ -30,7 +27,7 @@ public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
 	@Override
 	public Algorithm createAlgorithm(Data[] data,
 			Dictionary<String, Object> parameters, CIShellContext ciShellContext) {
-		return new BipartiteNetAlgorithm(getNWBFile(data),
+		return new BipartiteNetAlgorithm(data[0], getNWBFile(data),
 				(String) parameters.get(NODE_SIZE_COLUMN_ID),
 				(String) parameters.get(LEFT_SIDE_TYPE_ID));
 	}
