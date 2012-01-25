@@ -3,7 +3,7 @@ package edu.iu.sci2.visualization.bipartitenet.model;
 import com.google.common.base.Objects;
 
 public class Node {
-	private final double radius;
+	private final double dataValue;
 	private final NodeDestination destination;
 
 	private final String label;
@@ -15,7 +15,7 @@ public class Node {
 		}
 		this.destination = destination;
 		this.label = label;
-		this.radius = radius;
+		this.dataValue = radius;
 	}
 
 	public String getLabel() {
@@ -23,14 +23,15 @@ public class Node {
 	}
 
 	public double getValue() {
-		return radius;
+		return dataValue;
 	}
 
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this)
 				.add("label", label)
-				.add("radius", radius)
+				.add("side", destination)
+				.add("value", dataValue)
 				.toString();
 	}
 
