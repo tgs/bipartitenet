@@ -67,6 +67,7 @@ public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
 
 		mutator.add(LEFT_SIDE_TYPE_ID, examiner.getBipartiteTypes());
 		mutator.add(NODE_SIZE_COLUMN_ID, numericColumns);
+		
 
 		return mutator.mutate(oldParameters);
 	}

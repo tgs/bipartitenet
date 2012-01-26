@@ -82,10 +82,11 @@ public class BipartiteGraphRenderer implements Paintable {
 		LinkedHashMap<Node,NodeView> nodeViews = Maps.newLinkedHashMap();
 		int numNodes = nodes.size();
 		double denominator = Math.max(1, numNodes - 1); // don't divide by 0!
+		double maxHeight = centerLine.getLength() / denominator;
 		
 		for (int i = 0; i < numNodes; i++) {
 			Point2D centerPoint = centerLine.getPoint(i / denominator);
-			NodeView view = new NodeView(nodes.get(i), centerPoint, painter, nodeRadiusCoding);
+			NodeView view = new NodeView(nodes.get(i), centerPoint, painter, nodeRadiusCoding, maxHeight);
 			nodeViews.put(nodes.get(i), view);
 		}
 		return nodeViews;

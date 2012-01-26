@@ -12,7 +12,7 @@ import math.geom2d.polygon.SimplePolygon2D;
 public class EdgeView implements Paintable {
 	
 	private static final double NODE_EDGE_SPACE = 4;
-	private static final double ARROW_HEAD_SIDE_LENGTH = 6;
+	private static final double ARROW_HEAD_SIDE_LENGTH = 4;
 	private final NodeView dest;
 	private final NodeView src;
 
