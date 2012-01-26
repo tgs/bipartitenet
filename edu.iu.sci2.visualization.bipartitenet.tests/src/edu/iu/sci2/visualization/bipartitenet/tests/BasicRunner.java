@@ -5,10 +5,15 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+
+import org.apache.xmlgraphics.java2d.GraphicContext;
+import org.apache.xmlgraphics.java2d.ps.EPSDocumentGraphics2D;
 
 import edu.iu.nwb.util.nwbfile.ParsingException;
 import edu.iu.sci2.visualization.bipartitenet.PageDirector;
@@ -29,6 +34,7 @@ public class BasicRunner {
 		
 		renderOnScreen(model);
 		renderToPNG(model);
+		renderToEps(model);
 	}
 
 	private static void renderToPNG(BipartiteGraphDataModel model) throws IOException {
@@ -54,13 +60,15 @@ public class BasicRunner {
 		f.setVisible(true);
 	}
 
-	/*
+	private static void renderToEps(BipartiteGraphDataModel model) throws IOException {
+		
  		OutputStream out = new FileOutputStream("BLAH.eps");
 		EPSDocumentGraphics2D g2d = new EPSDocumentGraphics2D(false);
 		g2d.setGraphicContext(new GraphicContext());
-		g2d.setupDocument(out, 600, 600);
-		createRenderer().paint(g2d);
+		g2d.setupDocument(out, PageDirector.PAGE_WIDTH, PageDirector.PAGE_HEIGHT);
+		PageDirector r = new PageDirector(model, "Who", "What");
+		r.paint(g2d);
 		g2d.finish();
 		out.close();
-	 */
+	}
 }
