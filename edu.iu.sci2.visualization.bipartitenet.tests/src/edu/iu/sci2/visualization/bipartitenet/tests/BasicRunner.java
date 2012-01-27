@@ -29,8 +29,11 @@ public class BasicRunner {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException, ParsingException {
-		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "Who", "Desirability");
-		BipartiteGraphDataModel model = importer.constructModelFromFile(BasicRunner.class.getResourceAsStream("test-network.nwb"));
+//		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "Who", "Desirability");
+//		BipartiteGraphDataModel model = importer.constructModelFromFile(BasicRunner.class.getResourceAsStream("test-network.nwb"));
+		
+		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "APPL_ID", "totalawarded");
+		BipartiteGraphDataModel model = importer.constructModelFromFile(BasicRunner.class.getResourceAsStream("big-boring-network.nwb"));
 		
 		renderOnScreen(model);
 		renderToPNG(model);
