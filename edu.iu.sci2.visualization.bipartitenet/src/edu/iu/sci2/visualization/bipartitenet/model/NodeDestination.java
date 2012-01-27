@@ -57,18 +57,16 @@ public enum NodeDestination {
 	private static TextLayout fitTextLayout(String label, Graphics2D g, double maxHeight) {
 		Font currentFont = LABEL_FONT;
 		FontRenderContext frc = g.getFontRenderContext();
-		TextLayout tl = new TextLayout(label,
-				currentFont, frc);
 		for (int fontSize = LABEL_FONT.getSize() ; fontSize > 1; fontSize--) {
+			currentFont = LABEL_FONT.deriveFont(LABEL_FONT.getStyle(), fontSize);
+			TextLayout tl = new TextLayout("Alg", currentFont, frc); // risers and descenders
 			Rectangle2D textBounds = tl.getBounds();
 			if (textBounds.getHeight() + 1 < maxHeight) {
 				break;
 			}
-			currentFont = LABEL_FONT.deriveFont(LABEL_FONT.getStyle(), fontSize);
-			tl = new TextLayout(label, currentFont, frc);
 		}
 		
-		return tl;
+		return new TextLayout(label, currentFont, frc);
 	}
 	
 	private static float getFontCenterHeight(Graphics2D g) {
