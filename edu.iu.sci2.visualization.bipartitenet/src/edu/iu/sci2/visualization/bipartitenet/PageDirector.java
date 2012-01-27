@@ -37,7 +37,7 @@ public class PageDirector implements Paintable {
 	private static final Point2D LEFT_TITLE_POSITION = LEFT_LINE.getFirstPoint().translate(MAX_RADIUS, -50);
 	private static final Point2D RIGHT_TITLE_POSITION = RIGHT_LINE.getFirstPoint().translate(- MAX_RADIUS, -50);
 
-	public PageDirector(final BipartiteGraphDataModel dataModel, final String leftSideType, final String rightSideType) {
+	public PageDirector(final BipartiteGraphDataModel dataModel, final String leftSideType, String leftSideTitle, final String rightSideType, final String rightSideTitle) {
 		this.dataModel = dataModel;
 
 		CircleRadiusCoding coding = makeCircleCoding();
@@ -48,12 +48,12 @@ public class PageDirector implements Paintable {
 				LEFT_LINE, RIGHT_LINE, coding);
 		painter.add(renderer);
 		
-		painter.add(new RightAlignedLabel(LEFT_TITLE_POSITION, leftSideType, TITLE_FONT));
+		painter.add(new RightAlignedLabel(LEFT_TITLE_POSITION, leftSideTitle, TITLE_FONT));
 		painter.add(new Paintable() {
 			@Override
 			public void paint(Graphics2D g) {
 				g.setFont(TITLE_FONT);
-				g.drawString(rightSideType, (float) RIGHT_TITLE_POSITION.getX(), (float) RIGHT_TITLE_POSITION.getY());
+				g.drawString(rightSideTitle, (float) RIGHT_TITLE_POSITION.getX(), (float) RIGHT_TITLE_POSITION.getY());
 			}
 		});
 	}

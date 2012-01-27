@@ -25,6 +25,8 @@ public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
 		ParameterMutator {
 	private static final String LEFT_SIDE_TYPE_ID = "leftSideType";
 	private static final String NODE_SIZE_COLUMN_ID = "nodeSizeColumn";
+	private static final String LEFT_COLUMN_TITLE_ID = "leftColumnTitle";
+	private static final String RIGHT_COLUMN_TITLE_ID = "rightColumnTitle";
 	
 	private NWBFileExaminer examiner;
 	
@@ -38,10 +40,14 @@ public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
 		types.remove(leftSideType);
 		String rightSideType = types.get(0);
 		
+		String leftSideTitle = (String) parameters.get(LEFT_COLUMN_TITLE_ID);
+		leftSideTitle = leftSideTitle.isEmpty() ? leftSideType : leftSideTitle;
+		String rightSideTitle = (String) parameters.get(RIGHT_COLUMN_TITLE_ID);
+		rightSideTitle = rightSideTitle.isEmpty() ? rightSideType : rightSideTitle;
 		
 		return new BipartiteNetAlgorithm(data[0], getNWBFile(data),
 				(String) parameters.get(NODE_SIZE_COLUMN_ID),
-				leftSideType, rightSideType, log);
+				leftSideType, leftSideTitle, rightSideType, rightSideTitle, log);
 	}
 
 	@Override

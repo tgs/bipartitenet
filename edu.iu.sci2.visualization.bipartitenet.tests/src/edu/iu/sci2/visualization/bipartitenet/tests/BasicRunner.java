@@ -47,7 +47,7 @@ public class BasicRunner {
 		g.fillRect(0, 0, img.getWidth(), img.getHeight());
 		g.setPaint(Color.black);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		PageDirector r = new PageDirector(model, "Who", "What");
+		PageDirector r = new PageDirector(model, "Who", "Who title", "What", "What title");
 		r.paint(g);
 		ImageIO.write(img, "PNG", new File("BLAH.png"));
 	}
@@ -57,7 +57,7 @@ public class BasicRunner {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setSize(PageDirector.PAGE_WIDTH, PageDirector.PAGE_HEIGHT);
 		CanvasContainer cc = new CanvasContainer();
-		PageDirector r = new PageDirector(model, "Who", "What");
+		PageDirector r = new PageDirector(model, "Who", "Who title", "What", "What title");
 		cc.add(r);
 		f.getContentPane().add(cc);
 		f.setVisible(true);
@@ -69,7 +69,7 @@ public class BasicRunner {
 		EPSDocumentGraphics2D g2d = new EPSDocumentGraphics2D(false);
 		g2d.setGraphicContext(new GraphicContext());
 		g2d.setupDocument(out, PageDirector.PAGE_WIDTH, PageDirector.PAGE_HEIGHT);
-		PageDirector r = new PageDirector(model, "Who", "What");
+		PageDirector r = new PageDirector(model, "Who", "Who title", "What", "What title");
 		r.paint(g2d);
 		g2d.finish();
 		out.close();
