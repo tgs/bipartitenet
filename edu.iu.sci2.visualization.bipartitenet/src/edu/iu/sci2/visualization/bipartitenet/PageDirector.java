@@ -82,7 +82,7 @@ public class PageDirector implements Paintable {
 	public CircleRadiusCoding makeCircleCoding() {
 		double biggest = getMaxNodeValue();
 		return CircleRadiusCoding.createZeroAnchoredScaledCoding(biggest,
-				MAX_RADIUS);
+				calculateMaxNodeRadius());
 	}
 
 	private double getMaxNodeValue() {
@@ -93,5 +93,9 @@ public class PageDirector implements Paintable {
 				.getValue());
 		return biggest;
 	}
-
+	
+	private double calculateMaxNodeRadius() {
+		int maxNodesOnOneSide = Math.max(dataModel.getLeftNodes().size(), dataModel.getRightNodes().size());
+		return LEFT_LINE.getLength() / maxNodesOnOneSide;
+	}
 }
