@@ -27,6 +27,7 @@ public class Edge {
 		return Objects.toStringHelper(this)
 				.addValue(leftNode.getLabel())
 				.addValue(rightNode.getLabel())
+				.add("value", dataValue)
 				.toString();
 	}
 	

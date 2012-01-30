@@ -15,7 +15,6 @@ import java.util.Dictionary;
 import javax.imageio.ImageIO;
 
 import org.apache.xmlgraphics.java2d.GraphicContext;
-import org.apache.xmlgraphics.java2d.ps.EPSDocumentGraphics2D;
 import org.apache.xmlgraphics.java2d.ps.PSDocumentGraphics2D;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;

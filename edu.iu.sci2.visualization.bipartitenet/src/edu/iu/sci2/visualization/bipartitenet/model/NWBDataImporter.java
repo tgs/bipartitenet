@@ -155,7 +155,7 @@ public class NWBDataImporter {
 			if (! gotAnyRightNodes) {
 				log(LogService.LOG_WARNING, "Supposedly bipartite graph has no right-hand nodes");
 			}
-			return new BipartiteGraphDataModel(allNodes, edges, getNodeSizeCol());
+			return new BipartiteGraphDataModel(allNodes, edges, getNodeSizeCol(), getEdgeValueCol());
 		}
 
 	}

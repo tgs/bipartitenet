@@ -29,7 +29,7 @@ public class CircleRadiusCoding implements Function<Double, Double> {
 	public static CircleRadiusCoding createAutoScaledCoding(double min, double max, double maxRadius) {
 		if (Math.abs(min - max) < 0.00000001) {
 			// if min == max, just make the dots some size and don't worry.
-			return createWithSlopeAndIntercept(0, 10);
+			return createWithSlopeAndIntercept(0, maxRadius / 2);
 		}
 		double maxArea = Math.PI * maxRadius * maxRadius;
 		double minArea = 1;

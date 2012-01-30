@@ -11,6 +11,8 @@ import com.google.common.collect.Ordering;
 
 public class BipartiteGraphDataModel {
 	private final String nodeValueAttribute;
+	private final String edgeValueAttribute;
+	
 	private final ImmutableList<Node> leftNodes;
 	private final ImmutableList<Node> rightNodes;
 	
@@ -24,8 +26,10 @@ public class BipartiteGraphDataModel {
 		}
 	};
 
+
 	public BipartiteGraphDataModel(Collection<Node> allNodes,
-			Collection<Edge> edges, String nodeValueAttribute) {
+			Collection<Edge> edges, String nodeValueAttribute, String edgeValueAttribute) {
+		this.edgeValueAttribute = edgeValueAttribute;
 		List<Node> leftNodes = Lists.newArrayList(),
 				rightNodes = Lists.newArrayList();
 		for (Node n : allNodes) {
@@ -65,6 +69,18 @@ public class BipartiteGraphDataModel {
 
 	public String getNodeValueAttribute() {
 		return nodeValueAttribute;
+	}
+
+	public String getEdgeValueAttribute() {
+		return edgeValueAttribute;
+	}
+	
+	public boolean hasWeightedNodes() {
+		return nodeValueAttribute != null;
+	}
+	
+	public boolean hasWeightedEdges() {
+		return edgeValueAttribute != null;
 	}
 
 }

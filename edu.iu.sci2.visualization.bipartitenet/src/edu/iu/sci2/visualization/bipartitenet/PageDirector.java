@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableMap;
 
 import edu.iu.sci2.visualization.bipartitenet.component.CircleRadiusCoding;
 import edu.iu.sci2.visualization.bipartitenet.component.CircleRadiusLegend;
+import edu.iu.sci2.visualization.bipartitenet.component.LineWeightCoding;
 import edu.iu.sci2.visualization.bipartitenet.component.Paintable;
 import edu.iu.sci2.visualization.bipartitenet.component.PaintableContainer;
 import edu.iu.sci2.visualization.bipartitenet.model.BipartiteGraphDataModel;
@@ -41,11 +42,12 @@ public class PageDirector implements Paintable {
 		this.dataModel = dataModel;
 
 		CircleRadiusCoding coding = makeCircleCoding();
+		LineWeightCoding edgeCoding = makeColorCoding();
 		ImmutableMap<Double, String> legendLabels = chooseLegendLabels();
 		placeLegends(coding, legendLabels);
 
 		BipartiteGraphRenderer renderer = new BipartiteGraphRenderer(dataModel,
-				LEFT_LINE, RIGHT_LINE, coding);
+				LEFT_LINE, RIGHT_LINE, coding, edgeCoding);
 		painter.add(renderer);
 		
 		painter.add(new RightAlignedLabel(LEFT_TITLE_POSITION, leftSideTitle, TITLE_FONT));
@@ -56,6 +58,11 @@ public class PageDirector implements Paintable {
 				g.drawString(rightSideTitle, (float) RIGHT_TITLE_POSITION.getX(), (float) RIGHT_TITLE_POSITION.getY());
 			}
 		});
+	}
+
+	private LineWeightCoding makeColorCoding() {
+		// XXX
+		return LineWeightCoding.createZeroAnchoredScaledCoding(10);
 	}
 
 	private ImmutableMap<Double, String> chooseLegendLabels() {
@@ -80,14 +87,13 @@ public class PageDirector implements Paintable {
 	}
 
 	public CircleRadiusCoding makeCircleCoding() {
-		/* 
-		 * TODO: if there is no node weight (so all nodes have the same weight),
-		 * select a max size that is smaller than this.  It's ugly when all the
-		 * nodes are the maximum size.
-		 */
-		double biggest = getMaxNodeValue();
-		return CircleRadiusCoding.createZeroAnchoredScaledCoding(biggest,
-				calculateMaxNodeRadius());
+		if (dataModel.hasWeightedNodes()) {
+			double biggest = getMaxNodeValue();
+			return CircleRadiusCoding.createZeroAnchoredScaledCoding(biggest,
+					calculateMaxNodeRadius());
+		} else {
+			return CircleRadiusCoding.createAutoScaledCoding(1, 1, calculateMaxNodeRadius());
+		}
 	}
 
 	private double getMaxNodeValue() {

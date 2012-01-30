@@ -13,6 +13,7 @@ import com.google.common.collect.Maps;
 
 import edu.iu.sci2.visualization.bipartitenet.component.CircleRadiusCoding;
 import edu.iu.sci2.visualization.bipartitenet.component.EdgeView;
+import edu.iu.sci2.visualization.bipartitenet.component.LineWeightCoding;
 import edu.iu.sci2.visualization.bipartitenet.component.NodeView;
 import edu.iu.sci2.visualization.bipartitenet.component.Paintable;
 import edu.iu.sci2.visualization.bipartitenet.component.PaintableContainer;
@@ -31,14 +32,18 @@ public class BipartiteGraphRenderer implements Paintable {
 	private final LineSegment2D leftLine;
 
 	private final LineSegment2D rightLine;
-	private CircleRadiusCoding nodeRadiusCoding;
+	private final CircleRadiusCoding nodeRadiusCoding;
+	private final LineWeightCoding edgeCoding;
 
-	public BipartiteGraphRenderer(BipartiteGraphDataModel skel, LineSegment2D leftLine, LineSegment2D rightLine, CircleRadiusCoding nodeRadiusCoding) {
+	public BipartiteGraphRenderer(BipartiteGraphDataModel skel,
+			LineSegment2D leftLine, LineSegment2D rightLine,
+			CircleRadiusCoding nodeRadiusCoding, LineWeightCoding edgeCoding) {
 		this.data = skel;
 		this.leftLine = leftLine;
 		this.rightLine = rightLine;
 		this.nodeRadiusCoding = nodeRadiusCoding;
-		
+		this.edgeCoding = edgeCoding;
+
 		nodeToNodeView = ImmutableMap.copyOf(placeNodes());
 		placeEdges();
 		
@@ -58,8 +63,8 @@ public class BipartiteGraphRenderer implements Paintable {
 
 	private void placeEdges() {
 		for (Edge e : data.getEdges()) {
-			EdgeView ev = new EdgeView(nodeToNodeView.get(e.getLeftNode()),
-					nodeToNodeView.get(e.getRightNode()));
+			EdgeView ev = new EdgeView(e, nodeToNodeView.get(e.getLeftNode()),
+					nodeToNodeView.get(e.getRightNode()), edgeCoding);
 			
 			painter.add(ev);
 		}
