@@ -1,8 +1,17 @@
 package edu.iu.sci2.visualization.bipartitenet.model;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Ordering;
 
 public class Node {
+	public static final Ordering<Node> VALUE_ORDERING = new Ordering<Node>() {
+		@Override
+		public int compare(Node a, Node b) {
+			// decreasing
+			return - Double.compare(a.getValue(), b.getValue());
+		}
+	};
+	
 	private final double dataValue;
 	private final NodeDestination destination;
 

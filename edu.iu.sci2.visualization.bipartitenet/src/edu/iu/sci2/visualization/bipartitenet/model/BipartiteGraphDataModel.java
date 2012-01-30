@@ -18,15 +18,6 @@ public class BipartiteGraphDataModel {
 	
 	private final ImmutableList<Edge> edges;
 
-	private static final Ordering<Node> orderingByRadius = new Ordering<Node>() {
-		@Override
-		public int compare(Node a, Node b) {
-			// decreasing
-			return - Double.compare(a.getValue(), b.getValue());
-		}
-	};
-
-
 	public BipartiteGraphDataModel(Collection<Node> allNodes,
 			Collection<Edge> edges, String nodeValueAttribute, String edgeValueAttribute) {
 		this.edgeValueAttribute = edgeValueAttribute;
@@ -40,8 +31,8 @@ public class BipartiteGraphDataModel {
 			}
 		}
 		
-		this.leftNodes = ImmutableList.copyOf(orderingByRadius.sortedCopy(leftNodes));
-		this.rightNodes = ImmutableList.copyOf(orderingByRadius.sortedCopy(rightNodes));
+		this.leftNodes = ImmutableList.copyOf(Node.VALUE_ORDERING.sortedCopy(leftNodes));
+		this.rightNodes = ImmutableList.copyOf(Node.VALUE_ORDERING.sortedCopy(rightNodes));
 		this.edges = ImmutableList.copyOf(edges);
 		this.nodeValueAttribute = nodeValueAttribute;
 	}
