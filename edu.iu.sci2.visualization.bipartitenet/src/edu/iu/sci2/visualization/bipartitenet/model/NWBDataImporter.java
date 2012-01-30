@@ -38,7 +38,14 @@ public class NWBDataImporter {
 
 		@Override
 		public void addNode(int id, String label, Map<String, Object> attributes) {
-			Double weight = NumberUtilities.interpretObjectAsDouble(attributes.get(getNodeSizeCol()));
+			double weight;
+			
+			String nodeSizeCol = getNodeSizeCol();
+			if (nodeSizeCol != null) {
+				weight = NumberUtilities.interpretObjectAsDouble(attributes.get(getNodeSizeCol()));
+			} else {
+				weight = 1;
+			}
 			String type = (String) attributes.get(getNodeTypeCol());
 			NodeDestination dest;
 			if (getTypeThatIsLeft().equalsIgnoreCase(type)) {
@@ -59,6 +66,7 @@ public class NWBDataImporter {
 		public void addUndirectedEdge(int node1, int node2,
 				Map<String, Object> attributes) {
 			Node left, right, something;
+			double value;
 			something = nodeById.get(node1);
 			
 			if (something.getDestination() == NodeDestination.LEFT) {
@@ -74,7 +82,15 @@ public class NWBDataImporter {
 						left, right));
 			}
 			
-			edges.add(new Edge(left, right));
+			
+			String edgeValueCol = getEdgeValueCol();
+			if (edgeValueCol != null) {
+				value = NumberUtilities.interpretObjectAsDouble(attributes.get(edgeValueCol));
+			} else {
+				value = 1;
+			}
+			
+			edges.add(new Edge(left, right, value));
 		}
 
 		@Override
@@ -93,6 +109,7 @@ public class NWBDataImporter {
 
 		@Override
 		public void setDirectedEdgeSchema(LinkedHashMap<String, String> schema) {
+			checkEdgeSchema(schema);
 		}
 
 		@Override
@@ -101,7 +118,7 @@ public class NWBDataImporter {
 
 		@Override
 		public void setNodeSchema(LinkedHashMap<String, String> schema) {
-			if (! schema.containsKey(getNodeSizeCol())) {
+			if (getNodeSizeCol() != null && ! schema.containsKey(getNodeSizeCol())) {
 				throw new IllegalArgumentException(
 						String.format("Node schema should contain attribute %s (for node size), but does not.",
 								getNodeSizeCol()));
@@ -119,6 +136,16 @@ public class NWBDataImporter {
 
 		@Override
 		public void setUndirectedEdgeSchema(LinkedHashMap<String, String> schema) {
+			checkEdgeSchema(schema);
+		}
+
+		private void checkEdgeSchema(LinkedHashMap<String, String> schema) {
+			if (getEdgeValueCol() != null && ! schema.containsKey(getEdgeValueCol())) {
+				throw new IllegalArgumentException(
+						String.format("Edge schema should contain attribute %s (for edge weight), but does not.",
+								getNodeSizeCol()));
+				
+			}
 		}
 
 		public BipartiteGraphDataModel constructGraphDataModel() {
@@ -137,12 +164,14 @@ public class NWBDataImporter {
 	private final String nodeSizeCol;
 	private final String typeThatIsLeft;
 	LogService log = null;
+	private final String edgeValueCol;
 
 	public NWBDataImporter(String nodeTypeCol, String typeThatIsLeft,
-			String nodeSizeCol) {
+			String nodeSizeCol, String edgeValueCol) {
 		this.nodeTypeCol = nodeTypeCol;
 		this.typeThatIsLeft = typeThatIsLeft;
 		this.nodeSizeCol = nodeSizeCol;
+		this.edgeValueCol = edgeValueCol;
 	}
 	
 	public void log(int level, String message) {
@@ -152,10 +181,11 @@ public class NWBDataImporter {
 	}
 
 	public NWBDataImporter(String nodeTypeCol, String typeThatIsLeft,
-			String nodeSizeCol, LogService log) {
+			String nodeSizeCol, String edgeValueCol, LogService log) {
 		this.nodeTypeCol = nodeTypeCol;
 		this.typeThatIsLeft = typeThatIsLeft;
 		this.nodeSizeCol = nodeSizeCol;
+		this.edgeValueCol = edgeValueCol;
 		this.log = log;
 	}
 
@@ -177,5 +207,9 @@ public class NWBDataImporter {
 
 	public String getTypeThatIsLeft() {
 		return typeThatIsLeft;
+	}
+
+	public String getEdgeValueCol() {
+		return edgeValueCol;
 	}
 }

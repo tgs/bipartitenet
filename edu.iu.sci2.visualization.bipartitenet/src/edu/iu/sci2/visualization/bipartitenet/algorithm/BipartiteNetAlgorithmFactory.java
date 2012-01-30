@@ -17,14 +17,19 @@ import org.cishell.utilities.mutateParameter.dropdown.DropdownMutator;
 import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
+import com.google.common.collect.Lists;
+
 import edu.iu.nwb.util.nwbfile.NWBFileParser;
 import edu.iu.nwb.util.nwbfile.NWBFileUtilities;
 import edu.iu.nwb.util.nwbfile.ParsingException;
 
 public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
 		ParameterMutator {
+	private static final String NO_EDGE_WEIGHT_OPTION = "No edge weight";
+	private static final String NO_NODE_WEIGHT_OPTION = "No node weight";
 	private static final String LEFT_SIDE_TYPE_ID = "leftSideType";
 	private static final String NODE_SIZE_COLUMN_ID = "nodeSizeColumn";
+	private static final String EDGE_WEIGHT_COLUMN_ID = "edgeWeightColumn";
 	private static final String LEFT_COLUMN_TITLE_ID = "leftColumnTitle";
 	private static final String RIGHT_COLUMN_TITLE_ID = "rightColumnTitle";
 	
@@ -45,8 +50,18 @@ public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
 		String rightSideTitle = (String) parameters.get(RIGHT_COLUMN_TITLE_ID);
 		rightSideTitle = rightSideTitle.isEmpty() ? rightSideType : rightSideTitle;
 		
+		String nodeWeightColumn = (String) parameters.get(NODE_SIZE_COLUMN_ID);
+		if (nodeWeightColumn == NO_NODE_WEIGHT_OPTION) {
+			nodeWeightColumn = null;
+		}
+		
+		String edgeWeightColumn = (String) parameters.get(EDGE_WEIGHT_COLUMN_ID);
+		if (edgeWeightColumn == NO_EDGE_WEIGHT_OPTION) {
+			edgeWeightColumn = null;
+		}
+		
 		return new BipartiteNetAlgorithm(data[0], getNWBFile(data),
-				(String) parameters.get(NODE_SIZE_COLUMN_ID),
+				nodeWeightColumn, edgeWeightColumn,
 				leftSideType, leftSideTitle, rightSideType, rightSideTitle, log);
 	}
 
@@ -65,14 +80,22 @@ public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
 		}
 
 		LinkedHashMap<String, String> nodeSchema = examiner.getNodeSchema();
-		List<String> numericColumns = 
+		List<String> nodeNumericColumns = Lists.newArrayList(
 				NWBFileUtilities.findNumericAttributes(
-						NWBFileUtilities.removeRequiredNodeProps(nodeSchema));
+						NWBFileUtilities.removeRequiredNodeProps(nodeSchema)));
+		nodeNumericColumns.add(0, NO_NODE_WEIGHT_OPTION);
 
+		List<String> edgeNumericColumns = Lists.newArrayList(
+				NWBFileUtilities.findNumericAttributes(
+						NWBFileUtilities.removeRequiredEdgeProps(
+								NWBFileUtilities.getConsistentEdgeAttributes(examiner))));
+		edgeNumericColumns.add(0, NO_EDGE_WEIGHT_OPTION);
+		
 		DropdownMutator mutator = new DropdownMutator();
 
 		mutator.add(LEFT_SIDE_TYPE_ID, examiner.getBipartiteTypes());
-		mutator.add(NODE_SIZE_COLUMN_ID, numericColumns);
+		mutator.add(NODE_SIZE_COLUMN_ID, nodeNumericColumns);
+		mutator.add(EDGE_WEIGHT_COLUMN_ID, edgeNumericColumns);
 		
 
 		return mutator.mutate(oldParameters);

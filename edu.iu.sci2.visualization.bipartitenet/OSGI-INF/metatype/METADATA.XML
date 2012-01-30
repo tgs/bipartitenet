@@ -4,6 +4,7 @@
 		 description="Enter the columns for each parameter.">
 		<AD name="Left side node type" id="leftSideType" type="String" description="Values taken from the 'bipartitetype' column, which one should be on the left" default="(mutate)" />
 		<AD name="Node size" id="nodeSizeColumn" type="String" description="The column to use to calculate the node size" default="(mutate)" />
+		<AD name="Edge weight" id="edgeWeightColumn" type="String" description="The column to use to calculate the edge weight" default="(mutate)" />
 		<AD name="Title for left column (blank for default)" id="leftColumnTitle" type="String" description="The text to place above the left-hand column of nodes" default="" />
 		<AD name="Title for right column (blank for default)" id="rightColumnTitle" type="String" description="The text to place above the right-hand column of nodes" default="" />
 	</OCD>

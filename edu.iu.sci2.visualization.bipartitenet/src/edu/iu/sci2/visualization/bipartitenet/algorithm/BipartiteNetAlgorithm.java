@@ -40,7 +40,7 @@ public class BipartiteNetAlgorithm implements Algorithm {
 	private final String leftSideTitle;
 	private final String rightSideTitle;
 
-	public BipartiteNetAlgorithm(Data parentData, File nwbFile, String nodeSizeColumn,
+	public BipartiteNetAlgorithm(Data parentData, File nwbFile, String nodeSizeColumn, String edgeWeightColumn,
 			String leftSideType, String leftSideTitle, String rightSideType, String rightSideTitle, LogService log) {
 		this.parentData = parentData;
 		this.leftSideType = leftSideType;
@@ -48,7 +48,7 @@ public class BipartiteNetAlgorithm implements Algorithm {
 		this.rightSideType = rightSideType;
 		this.rightSideTitle = rightSideTitle;
 		importer = new NWBDataImporter("bipartitetype",
-				leftSideType, nodeSizeColumn, log);
+				leftSideType, nodeSizeColumn, edgeWeightColumn, log);
 		this.nwbFile = nwbFile;
 	}
 

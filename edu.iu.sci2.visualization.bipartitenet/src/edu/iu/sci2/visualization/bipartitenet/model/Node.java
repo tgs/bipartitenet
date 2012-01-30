@@ -8,14 +8,14 @@ public class Node {
 
 	private final String label;
 
-	public Node(String label, double radius, NodeDestination destination) {
+	public Node(String label, double weight, NodeDestination destination) {
 		super();
 		if (label == null) {
 			throw new NullPointerException("Label must not be null");
 		}
 		this.destination = destination;
 		this.label = label;
-		this.dataValue = radius;
+		this.dataValue = weight;
 	}
 
 	public String getLabel() {

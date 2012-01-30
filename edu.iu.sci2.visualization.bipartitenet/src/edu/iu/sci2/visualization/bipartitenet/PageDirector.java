@@ -80,6 +80,11 @@ public class PageDirector implements Paintable {
 	}
 
 	public CircleRadiusCoding makeCircleCoding() {
+		/* 
+		 * TODO: if there is no node weight (so all nodes have the same weight),
+		 * select a max size that is smaller than this.  It's ugly when all the
+		 * nodes are the maximum size.
+		 */
 		double biggest = getMaxNodeValue();
 		return CircleRadiusCoding.createZeroAnchoredScaledCoding(biggest,
 				calculateMaxNodeRadius());
