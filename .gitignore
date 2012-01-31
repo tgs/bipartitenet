@@ -3,5 +3,6 @@
 .classpath
 *.class
 *.eps
+BLAH.*
 target
 bin
