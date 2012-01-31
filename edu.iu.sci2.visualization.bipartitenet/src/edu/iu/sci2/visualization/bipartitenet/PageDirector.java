@@ -107,6 +107,6 @@ public class PageDirector implements Paintable {
 	
 	private double calculateMaxNodeRadius() {
 		int maxNodesOnOneSide = Math.max(dataModel.getLeftNodes().size(), dataModel.getRightNodes().size());
-		return LEFT_LINE.getLength() / maxNodesOnOneSide;
+		return Math.min(MAX_RADIUS, LEFT_LINE.getLength() / maxNodesOnOneSide);
 	}
 }
