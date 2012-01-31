@@ -32,7 +32,7 @@ public class BasicRunner {
 //		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "Who", "Desirability");
 //		BipartiteGraphDataModel model = importer.constructModelFromFile(BasicRunner.class.getResourceAsStream("test-network.nwb"));
 		
-		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "APPL_ID", "totalawarded");
+		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "APPL_ID", "totalawarded", null);
 		BipartiteGraphDataModel model = importer.constructModelFromFile(BasicRunner.class.getResourceAsStream("big-boring-network.nwb"));
 		
 		renderOnScreen(model);

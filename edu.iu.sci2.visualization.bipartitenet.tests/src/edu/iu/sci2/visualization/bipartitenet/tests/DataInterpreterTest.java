@@ -22,7 +22,7 @@ public class DataInterpreterTest {
 	
 	@Test
 	public void testNormal() throws IOException, ParsingException {
-		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "Who", "Desirability");
+		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "Who", "Desirability", null);
 		BipartiteGraphDataModel model;
 		model = importer.constructModelFromFile(getTestNetwork());
 		assertNotNull(model);
@@ -34,7 +34,7 @@ public class DataInterpreterTest {
 	
 	@Test
 	public void testBadTypeColumn() throws IOException, ParsingException {
-		NWBDataImporter importer = new NWBDataImporter("wrongname", "Who", "Desirability");
+		NWBDataImporter importer = new NWBDataImporter("wrongname", "Who", "Desirability", null);
 		exception.expect(ParsingException.class);
 		exception.expectMessage("schema");
 		exception.expectMessage("wrongname"); // message should mention the column it's looking for
@@ -44,7 +44,7 @@ public class DataInterpreterTest {
 	
 	@Test
 	public void testBadSizeColumn() throws IOException, ParsingException {
-		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "Who", "wrongname");
+		NWBDataImporter importer = new NWBDataImporter("bipartitetype", "Who", "wrongname", null);
 		exception.expect(ParsingException.class);
 		exception.expectMessage("schema");
 		exception.expectMessage("wrongname");
