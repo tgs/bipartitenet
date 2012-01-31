@@ -61,8 +61,7 @@ public class PageDirector implements Paintable {
 	}
 
 	private LineWeightCoding makeColorCoding() {
-		// XXX
-		return LineWeightCoding.createZeroAnchoredScaledCoding(10);
+		return LineWeightCoding.createFromEdges(dataModel.getEdges());
 	}
 
 	private ImmutableMap<Double, String> chooseLegendLabels() {

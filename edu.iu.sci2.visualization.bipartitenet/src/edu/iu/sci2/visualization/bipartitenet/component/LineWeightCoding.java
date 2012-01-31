@@ -1,14 +1,16 @@
 package edu.iu.sci2.visualization.bipartitenet.component;
 
 import java.awt.Color;
-import java.awt.color.ColorSpace;
+import java.util.Collection;
 
 import com.google.common.base.Function;
 
+import edu.iu.sci2.visualization.bipartitenet.model.Edge;
+
 public class LineWeightCoding implements Function<Double, Color> {
-	private static final float[] DEFAULT_COLOR_HSB = new float[] { 0, 1, 0 }; 
-	private static final double MAX_SATURATION = 255;
-	private static final double MIN_SATURATION = 40;
+	private static final float[] DEFAULT_COLOR_HSB = new float[] { 0, 0, 1 }; 
+	private static final double MAX_BRIGHTNESS = 1;
+	private static final double MIN_BRIGHTNESS = 0.1;
 	private final double slope;
 	private final double intercept;
 	
@@ -17,6 +19,22 @@ public class LineWeightCoding implements Function<Double, Color> {
 		this.intercept = intercept;
 	}
 
+	public static LineWeightCoding createFromEdges(Collection<Edge> edges) {
+		if (edges.isEmpty()) {
+			// XXX: is this the right thing to do?
+			throw new IllegalArgumentException("Must have at least one edge...");
+		}
+
+		// XXX: what about negative values?  error, warning, or just be wrong?
+		double max = Double.NEGATIVE_INFINITY;
+		for (Edge e : edges) {
+			System.out.println(e);
+			double v = e.getDataValue();
+			max = Math.max(max, v);
+		}
+		
+		return createZeroAnchoredScaledCoding(max);
+	}
 	public static LineWeightCoding createZeroAnchoredScaledCoding(double max) {
 		return createAutoScaledCoding(0, max);
 	}
@@ -24,10 +42,10 @@ public class LineWeightCoding implements Function<Double, Color> {
 	public static LineWeightCoding createAutoScaledCoding(double min, double max) {
 		if (Math.abs(min - max) < 0.00000001) {
 			// if min == max, just make lines some color and don't worry...
-			return createWithSlopeAndIntercept(0, MAX_SATURATION / 2);
+			return createWithSlopeAndIntercept(0, MAX_BRIGHTNESS / 2);
 		}
-		double slope = (MAX_SATURATION - MIN_SATURATION) / (max - min);
-		double intercept = (- min) * slope + MIN_SATURATION;
+		double slope = (MAX_BRIGHTNESS - MIN_BRIGHTNESS) / (max - min);
+		double intercept = (- min) * slope + MIN_BRIGHTNESS;
 		
 		return createWithSlopeAndIntercept(slope, intercept);
 	}
@@ -41,8 +59,8 @@ public class LineWeightCoding implements Function<Double, Color> {
 	@Override
 	public Color apply(Double arg0) {
 		float h = DEFAULT_COLOR_HSB[0],
-				s = DEFAULT_COLOR_HSB[1] * (float) (slope * arg0 + intercept),
-				b = DEFAULT_COLOR_HSB[2];
+				s = DEFAULT_COLOR_HSB[1],
+				b = DEFAULT_COLOR_HSB[2] * (1 - (float) (slope * arg0 + intercept));
 		return Color.getHSBColor(h, s, b);
 	}
 }

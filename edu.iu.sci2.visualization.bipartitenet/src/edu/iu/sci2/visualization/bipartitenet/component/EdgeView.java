@@ -1,5 +1,6 @@
 package edu.iu.sci2.visualization.bipartitenet.component;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import math.geom2d.AffineTransform2D;
@@ -28,7 +29,9 @@ public class EdgeView implements Paintable {
 	@Override
 	public void paint(Graphics2D gIn) {
 		Graphics2D g = (Graphics2D) gIn.create();
-		g.setColor(edgeCoding.apply(e.getDataValue()));
+		Color edgeColor = edgeCoding.apply(e.getDataValue());
+		System.out.println(edgeColor);
+		g.setColor(edgeColor);
 		LineSegment2D grossLine = new LineSegment2D(src.getNodeCenter(), dest.getNodeCenter());
 		double tStart = (src.getRadius() + NODE_EDGE_SPACE) / grossLine.getLength(),
 				tEnd = (dest.getRadius() + NODE_EDGE_SPACE) / grossLine.getLength();
