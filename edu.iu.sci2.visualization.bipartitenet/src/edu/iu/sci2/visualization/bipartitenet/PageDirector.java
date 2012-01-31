@@ -69,7 +69,7 @@ public class PageDirector implements Paintable {
 		double max = getMaxNodeValue();
 		double half = max / 2;
 		// maybe use the decimal format choosing from geomaps?
-		return ImmutableMap.of(0.0, "0", half, ""+half, max, ""+max);
+		return ImmutableMap.of(0.0, "0.0", half, ""+half, max, ""+max);
 	}
 
 	private void placeLegends(CircleRadiusCoding coding,
