@@ -1,9 +1,16 @@
 package edu.iu.sci2.visualization.bipartitenet.model;
 
+import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.collect.Ordering;
 
 public class Node {
+	public static final Function<Node,Double> VALUE_GETTER = new Function<Node,Double>() {
+		@Override
+		public Double apply(Node it) {
+			return it.getValue();
+		}
+	};
 	public static final Ordering<Node> VALUE_ORDERING = new Ordering<Node>() {
 		@Override
 		public int compare(Node a, Node b) {

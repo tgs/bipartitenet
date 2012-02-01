@@ -1,8 +1,15 @@
 package edu.iu.sci2.visualization.bipartitenet.model;
 
+import com.google.common.base.Function;
 import com.google.common.base.Objects;
 
 public class Edge {
+	public static final Function<Edge,Double> VALUE_GETTER = new Function<Edge,Double>(){
+		@Override
+		public Double apply(Edge it) {
+			return it.getDataValue();
+		}
+	};
 	private final Node leftNode;
 	private final Node rightNode;
 	private final double dataValue;

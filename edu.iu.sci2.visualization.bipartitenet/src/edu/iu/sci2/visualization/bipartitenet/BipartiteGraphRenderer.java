@@ -11,9 +11,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
-import edu.iu.sci2.visualization.bipartitenet.component.CircleRadiusCoding;
 import edu.iu.sci2.visualization.bipartitenet.component.EdgeView;
-import edu.iu.sci2.visualization.bipartitenet.component.LineWeightCoding;
 import edu.iu.sci2.visualization.bipartitenet.component.NodeView;
 import edu.iu.sci2.visualization.bipartitenet.component.Paintable;
 import edu.iu.sci2.visualization.bipartitenet.component.PaintableContainer;
@@ -21,6 +19,7 @@ import edu.iu.sci2.visualization.bipartitenet.model.BipartiteGraphDataModel;
 import edu.iu.sci2.visualization.bipartitenet.model.Edge;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 import edu.iu.sci2.visualization.bipartitenet.model.NodeDestination;
+import edu.iu.sci2.visualization.bipartitenet.scale.Scale;
 
 public class BipartiteGraphRenderer implements Paintable {
 	
@@ -32,12 +31,12 @@ public class BipartiteGraphRenderer implements Paintable {
 	private final LineSegment2D leftLine;
 
 	private final LineSegment2D rightLine;
-	private final CircleRadiusCoding nodeRadiusCoding;
-	private final LineWeightCoding edgeCoding;
+	private final Scale<Double,Double> nodeRadiusCoding;
+	private final Scale<Double,Color> edgeCoding;
 
 	public BipartiteGraphRenderer(BipartiteGraphDataModel skel,
 			LineSegment2D leftLine, LineSegment2D rightLine,
-			CircleRadiusCoding nodeRadiusCoding, LineWeightCoding edgeCoding) {
+			Scale<Double,Double> nodeRadiusCoding, Scale<Double,Color> edgeCoding) {
 		this.data = skel;
 		this.leftLine = leftLine;
 		this.rightLine = rightLine;

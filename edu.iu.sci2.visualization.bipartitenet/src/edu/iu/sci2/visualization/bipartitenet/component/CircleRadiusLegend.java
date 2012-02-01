@@ -15,9 +15,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 
 import edu.iu.sci2.visualization.bipartitenet.PageDirector;
+import edu.iu.sci2.visualization.bipartitenet.scale.Scale;
 
 public class CircleRadiusLegend implements Paintable {
-	private final CircleRadiusCoding coding;
+	private final Scale<Double,Double> coding;
 	private final ImmutableMap<Double, String> labeledValues;
 	private final Point2D topCenter;
 	private final String title;
@@ -31,7 +32,7 @@ public class CircleRadiusLegend implements Paintable {
 	
 	
 	public CircleRadiusLegend(Point2D topCenter, String title,
-			CircleRadiusCoding coding,
+			Scale<Double,Double> coding,
 			ImmutableMap<Double, String> labeledValues, double maxRadius) {
 		this.topCenter = topCenter;
 		this.title = title;

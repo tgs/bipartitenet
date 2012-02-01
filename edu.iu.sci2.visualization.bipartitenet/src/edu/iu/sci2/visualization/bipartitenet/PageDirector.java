@@ -1,5 +1,6 @@
 package edu.iu.sci2.visualization.bipartitenet;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.List;
@@ -8,14 +9,20 @@ import math.geom2d.Point2D;
 import math.geom2d.line.LineSegment2D;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 
-import edu.iu.sci2.visualization.bipartitenet.component.CircleRadiusCoding;
 import edu.iu.sci2.visualization.bipartitenet.component.CircleRadiusLegend;
-import edu.iu.sci2.visualization.bipartitenet.component.LineWeightCoding;
 import edu.iu.sci2.visualization.bipartitenet.component.Paintable;
 import edu.iu.sci2.visualization.bipartitenet.component.PaintableContainer;
+import edu.iu.sci2.visualization.bipartitenet.component.RightAlignedLabel;
 import edu.iu.sci2.visualization.bipartitenet.model.BipartiteGraphDataModel;
+import edu.iu.sci2.visualization.bipartitenet.model.Edge;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
+import edu.iu.sci2.visualization.bipartitenet.scale.BrightnessScale;
+import edu.iu.sci2.visualization.bipartitenet.scale.ConstantCircleRadius;
+import edu.iu.sci2.visualization.bipartitenet.scale.ConstantColor;
+import edu.iu.sci2.visualization.bipartitenet.scale.Scale;
+import edu.iu.sci2.visualization.bipartitenet.scale.ZeroAnchoredCircleRadiusScale;
 
 public class PageDirector implements Paintable {
 	private PaintableContainer painter = new PaintableContainer();
@@ -41,8 +48,8 @@ public class PageDirector implements Paintable {
 	public PageDirector(final BipartiteGraphDataModel dataModel, final String leftSideType, String leftSideTitle, final String rightSideType, final String rightSideTitle) {
 		this.dataModel = dataModel;
 
-		CircleRadiusCoding coding = makeCircleCoding();
-		LineWeightCoding edgeCoding = makeColorCoding();
+		Scale<Double,Double> coding = makeCircleCoding();
+		Scale<Double,Color> edgeCoding = makeColorCoding();
 		ImmutableMap<Double, String> legendLabels = chooseLegendLabels();
 		placeLegends(coding, legendLabels);
 
@@ -60,8 +67,15 @@ public class PageDirector implements Paintable {
 		});
 	}
 
-	private LineWeightCoding makeColorCoding() {
-		return LineWeightCoding.createFromEdges(dataModel.getEdges());
+	private Scale<Double,Color> makeColorCoding() {
+		if (dataModel.hasWeightedEdges()) {
+			Scale<Double,Color> colorScale = BrightnessScale.createWithDefaultColor();
+			colorScale.train(Iterables.transform(dataModel.getEdges(), Edge.VALUE_GETTER));
+			colorScale.doneTraining();
+			return colorScale;
+		} else {
+			return new ConstantColor();
+		}
 	}
 
 	private ImmutableMap<Double, String> chooseLegendLabels() {
@@ -71,7 +85,7 @@ public class PageDirector implements Paintable {
 		return ImmutableMap.of(0.0, "0.0", half, ""+half, max, ""+max);
 	}
 
-	private void placeLegends(CircleRadiusCoding coding,
+	private void placeLegends(Scale<Double,Double> coding,
 			ImmutableMap<Double, String> labels) {
 		CircleRadiusLegend legend = new CircleRadiusLegend(
 				CIRCLE_LEGEND_POSITION, "Circle Area: "
@@ -85,22 +99,25 @@ public class PageDirector implements Paintable {
 		painter.paint(g);
 	}
 
-	public CircleRadiusCoding makeCircleCoding() {
+	private Scale<Double, Double> makeCircleCoding() {
 		if (dataModel.hasWeightedNodes()) {
-			double biggest = getMaxNodeValue();
-			return CircleRadiusCoding.createZeroAnchoredScaledCoding(biggest,
-					calculateMaxNodeRadius());
+			Scale<Double, Double> nodeScale = new ZeroAnchoredCircleRadiusScale(calculateMaxNodeRadius());
+			nodeScale.train(Iterables.transform(dataModel.getLeftNodes(), Node.VALUE_GETTER));
+			nodeScale.train(Iterables.transform(dataModel.getRightNodes(), Node.VALUE_GETTER));
+			nodeScale.doneTraining();
+			return nodeScale;
 		} else {
-			return CircleRadiusCoding.createAutoScaledCoding(1, 1, calculateMaxNodeRadius());
+			return new ConstantCircleRadius(calculateMaxNodeRadius());
 		}
 	}
 
 	private double getMaxNodeValue() {
 		double biggest;
-		List<Node> leftNodes = dataModel.getLeftNodes(), rightNodes = dataModel
-				.getRightNodes();
-		biggest = Math.max(leftNodes.get(0).getValue(), rightNodes.get(0)
-				.getValue());
+		List<Node> leftNodes = dataModel.getLeftNodes(),
+				rightNodes = dataModel.getRightNodes();
+		
+		biggest = Math.max(leftNodes.get(0).getValue(),
+				rightNodes.get(0).getValue());
 		return biggest;
 	}
 	

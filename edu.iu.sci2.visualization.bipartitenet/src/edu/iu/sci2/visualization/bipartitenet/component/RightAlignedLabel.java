@@ -1,4 +1,4 @@
-package edu.iu.sci2.visualization.bipartitenet;
+package edu.iu.sci2.visualization.bipartitenet.component;
 
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -7,7 +7,6 @@ import java.awt.geom.Rectangle2D;
 
 import math.geom2d.Point2D;
 
-import edu.iu.sci2.visualization.bipartitenet.component.Paintable;
 
 public class RightAlignedLabel implements Paintable {
 

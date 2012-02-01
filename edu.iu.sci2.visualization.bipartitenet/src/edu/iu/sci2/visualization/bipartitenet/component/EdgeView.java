@@ -9,6 +9,7 @@ import math.geom2d.line.AbstractLine2D;
 import math.geom2d.line.LineSegment2D;
 import math.geom2d.polygon.SimplePolygon2D;
 import edu.iu.sci2.visualization.bipartitenet.model.Edge;
+import edu.iu.sci2.visualization.bipartitenet.scale.Scale;
 
 public class EdgeView implements Paintable {
 	
@@ -16,10 +17,10 @@ public class EdgeView implements Paintable {
 	private static final double ARROW_HEAD_SIDE_LENGTH = 4;
 	private final NodeView dest;
 	private final NodeView src;
-	private final LineWeightCoding edgeCoding;
+	private final Scale<Double,Color> edgeCoding;
 	private final Edge e;
 
-	public EdgeView(Edge e, NodeView src, NodeView dest, LineWeightCoding edgeCoding) {
+	public EdgeView(Edge e, NodeView src, NodeView dest, Scale<Double,Color> edgeCoding) {
 		this.e = e;
 		this.src = src;
 		this.dest = dest;

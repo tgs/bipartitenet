@@ -8,16 +8,17 @@ import math.geom2d.conic.Circle2D;
 import edu.iu.sci2.visualization.bipartitenet.PageDirector;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 import edu.iu.sci2.visualization.bipartitenet.model.NodeDestination;
+import edu.iu.sci2.visualization.bipartitenet.scale.Scale;
 
 public class NodeView implements Paintable {
 	private final Node node;
 	private final Point2D nodeCenter;
 	private final NodeDestination leftRightDifference;
-	private final CircleRadiusCoding coding;
+	private final Scale<Double,Double> coding;
 	public static final int NODE_TEXT_PADDING = 8;
 	private final double maxHeight;
 
-	public NodeView(Node node, Point2D nodeCenter, NodeDestination painter, CircleRadiusCoding coding, double maxHeight) {
+	public NodeView(Node node, Point2D nodeCenter, NodeDestination painter, Scale<Double,Double> coding, double maxHeight) {
 		super();
 		this.node = node;
 		this.nodeCenter = nodeCenter;
@@ -43,7 +44,7 @@ public class NodeView implements Paintable {
 	}
 	
 	public double getRadius() {
-		return coding.apply(node.getValue());
+		return coding.apply(Node.VALUE_GETTER.apply(node));
 	}
 
 	@Override
