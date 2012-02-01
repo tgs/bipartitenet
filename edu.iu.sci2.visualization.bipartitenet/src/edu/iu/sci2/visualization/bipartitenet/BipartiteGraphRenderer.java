@@ -48,17 +48,6 @@ public class BipartiteGraphRenderer implements Paintable {
 		
 		
 	}
-	
-	
-//	private void doTestStuff(Graphics2D g) {
-//		System.err.println(g.getFont().getFontName());
-//		GlyphVector vec = g.getFont().createGlyphVector(g.getFontRenderContext(), "I am a banana!");
-//		Shape s = vec.getOutline();
-//		Path2D.Double path = new Path2D.Double(s);
-//		path.append(new Path2D.Double(new Rectangle2D.Double(10, 10, 20, 20)).getPathIterator(null), false);
-//		path.transform(AffineTransform.getTranslateInstance(10, 15));
-//		g.draw(path);
-//	}
 
 	private void placeEdges() {
 		for (Edge e : data.getEdges()) {
