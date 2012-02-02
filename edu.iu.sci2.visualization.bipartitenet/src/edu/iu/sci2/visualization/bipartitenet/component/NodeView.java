@@ -44,7 +44,7 @@ public class NodeView implements Paintable {
 	}
 	
 	public double getRadius() {
-		return coding.apply(Node.VALUE_GETTER.apply(node));
+		return coding.apply(Node.WEIGHT_GETTER.apply(node));
 	}
 
 	@Override

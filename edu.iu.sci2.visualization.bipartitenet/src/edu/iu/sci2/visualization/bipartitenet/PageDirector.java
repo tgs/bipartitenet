@@ -103,7 +103,7 @@ public class PageDirector implements Paintable {
 	private Scale<Double,Color> makeColorCoding() {
 		if (dataModel.hasWeightedEdges()) {
 			Scale<Double,Color> colorScale = BrightnessScale.createWithDefaultColor();
-			colorScale.train(Iterables.transform(dataModel.getEdges(), Edge.VALUE_GETTER));
+			colorScale.train(Iterables.transform(dataModel.getEdges(), Edge.WEIGHT_GETTER));
 			colorScale.doneTraining();
 			return colorScale;
 		} else {
@@ -136,8 +136,8 @@ public class PageDirector implements Paintable {
 	private Scale<Double, Double> makeCircleCoding() {
 		if (dataModel.hasWeightedNodes()) {
 			Scale<Double, Double> nodeScale = new ZeroAnchoredCircleRadiusScale(calculateMaxNodeRadius());
-			nodeScale.train(Iterables.transform(dataModel.getLeftNodes(), Node.VALUE_GETTER));
-			nodeScale.train(Iterables.transform(dataModel.getRightNodes(), Node.VALUE_GETTER));
+			nodeScale.train(Iterables.transform(dataModel.getLeftNodes(), Node.WEIGHT_GETTER));
+			nodeScale.train(Iterables.transform(dataModel.getRightNodes(), Node.WEIGHT_GETTER));
 			nodeScale.doneTraining();
 			return nodeScale;
 		} else {

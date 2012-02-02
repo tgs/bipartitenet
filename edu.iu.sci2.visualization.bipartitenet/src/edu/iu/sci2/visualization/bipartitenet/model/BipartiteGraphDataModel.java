@@ -28,8 +28,8 @@ public class BipartiteGraphDataModel {
 			}
 		}
 		
-		this.leftNodes = ImmutableList.copyOf(Node.VALUE_ORDERING.reverse().sortedCopy(leftNodes));
-		this.rightNodes = ImmutableList.copyOf(Node.VALUE_ORDERING.reverse().sortedCopy(rightNodes));
+		this.leftNodes = ImmutableList.copyOf(Node.WEIGHT_ORDERING.reverse().sortedCopy(leftNodes));
+		this.rightNodes = ImmutableList.copyOf(Node.WEIGHT_ORDERING.reverse().sortedCopy(rightNodes));
 		this.edges = ImmutableList.copyOf(edges);
 		this.nodeValueAttribute = nodeValueAttribute;
 		this.edgeValueAttribute = edgeValueAttribute;

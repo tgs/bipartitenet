@@ -5,13 +5,13 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Ordering;
 
 public class Node {
-	public static final Function<Node,Double> VALUE_GETTER = new Function<Node,Double>() {
+	public static final Function<Node,Double> WEIGHT_GETTER = new Function<Node,Double>() {
 		@Override
 		public Double apply(Node it) {
-			return it.getValue();
+			return it.getWeight();
 		}
 	};
-	public static final Ordering<Node> VALUE_ORDERING = Ordering.natural().onResultOf(VALUE_GETTER);
+	public static final Ordering<Node> WEIGHT_ORDERING = Ordering.natural().onResultOf(WEIGHT_GETTER);
 	
 	private final String label;
 	private final double weight;
@@ -31,7 +31,7 @@ public class Node {
 		return label;
 	}
 
-	public double getValue() {
+	public double getWeight() {
 		return weight;
 	}
 
@@ -43,7 +43,7 @@ public class Node {
 	public String toString() {
 		return Objects.toStringHelper(this)
 				.add("label", label)
-				.add("value", weight)
+				.add("weight", weight)
 				.add("side", destination)
 				.toString();
 	}

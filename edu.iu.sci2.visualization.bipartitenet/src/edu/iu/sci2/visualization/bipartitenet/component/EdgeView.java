@@ -30,7 +30,7 @@ public class EdgeView implements Paintable {
 	@Override
 	public void paint(Graphics2D gIn) {
 		Graphics2D g = (Graphics2D) gIn.create();
-		Color edgeColor = edgeCoding.apply(e.getDataValue());
+		Color edgeColor = edgeCoding.apply(e.getWeight());
 		g.setColor(edgeColor);
 		LineSegment2D grossLine = new LineSegment2D(src.getNodeCenter(), dest.getNodeCenter());
 		double tStart = (src.getRadius() + NODE_EDGE_SPACE) / grossLine.getLength(),
