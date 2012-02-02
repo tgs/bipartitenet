@@ -37,7 +37,21 @@ public class PageDirector implements Paintable {
 	private static final LineSegment2D RIGHT_LINE = new LineSegment2D(500, 100,
 			500, 500);
 	
-	public static final Font BASIC_FONT = new Font("Arial", Font.PLAIN, 12);
+	public static final Font BASIC_FONT;
+	static {
+		ImmutableList<String> fontFamiliesToTry = ImmutableList.of("Arial", "Helvetica", 
+				"FreeSans", "Nimbus Sans", "Dialog");
+		Font thisFont = new Font("Dialog", Font.PLAIN, 12);
+		for (String family : fontFamiliesToTry) {
+			thisFont = new Font(family, Font.PLAIN, 12);
+			if (! thisFont.getFamily().equals("Dialog")) {
+				// found one that the system has!
+				break;
+			}
+		}
+		BASIC_FONT = thisFont;
+		
+	}
 	private static final Font TITLE_FONT = BASIC_FONT.deriveFont(Font.BOLD, 16);
 
 	private static final Point2D CIRCLE_LEGEND_POSITION = new Point2D(250, 600);
