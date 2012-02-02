@@ -35,7 +35,7 @@ public class PageDirector implements Paintable {
 	private static final LineSegment2D LEFT_LINE = new LineSegment2D(300, 100, 300, 500);
 	private static final LineSegment2D RIGHT_LINE = new LineSegment2D(500, 100, 500, 500);
 	
-	public static final Font BASIC_FONT = pickFont();
+	public static final Font BASIC_FONT = findBasicFont();
 	private static final Font TITLE_FONT = BASIC_FONT.deriveFont(Font.BOLD, 16);
 
 	private static final Point2D CIRCLE_LEGEND_POSITION = new Point2D(250, 600);
@@ -46,23 +46,24 @@ public class PageDirector implements Paintable {
 	public PageDirector(final BipartiteGraphDataModel dataModel, final String leftSideType, String leftSideTitle, final String rightSideType, final String rightSideTitle) {
 		this.dataModel = dataModel;
 
-		Scale<Double,Double> coding = makeCircleCoding();
-		Scale<Double,Color> edgeCoding = makeColorCoding();
-		
+		// Make codings for the nodes and edges (size and color)
+		// If the nodes/edges are not weighted, it makes a "constant" coding.
+		// Only put in a legend if the nodes/edges are weighted.
+		Scale<Double,Double> nodeCoding = makeNodeCoding();
 		if (dataModel.hasWeightedNodes()) {
-			ImmutableList<Double> legendLabels = chooseNodeLegendLabels(coding);
-			placeNodeLegend(coding, legendLabels);
+			makeNodeLegend(nodeCoding);
 		}
 
+		Scale<Double,Color> edgeCoding = makeEdgeCoding();
 		if (dataModel.hasWeightedEdges()) {
-			ImmutableList<Double> edgeLegendLabels = chooseEdgeLegendLabels(edgeCoding);
-			placeEdgeLegend(edgeCoding, edgeLegendLabels);
+			makeEdgeLegend(edgeCoding);
 		}
 		
 		BipartiteGraphRenderer renderer = new BipartiteGraphRenderer(dataModel,
-				LEFT_LINE, RIGHT_LINE, coding, edgeCoding);
+				LEFT_LINE, RIGHT_LINE, nodeCoding, edgeCoding);
 		painter.add(renderer);
 		
+		// The titles of the two columns
 		painter.add(new RightAlignedLabel(LEFT_TITLE_POSITION, leftSideTitle, TITLE_FONT));
 		painter.add(new Paintable() {
 			@Override
@@ -73,8 +74,12 @@ public class PageDirector implements Paintable {
 		});
 	}
 
-
-	private static Font pickFont() { // TODO name
+	/**
+	 * Looks for a font that will work on this system.  It tries several that are likely to
+	 * be present on a Windows or Linux system, and falls back to Java's default font.
+	 * @return
+	 */
+	private static Font findBasicFont() {
 		final String JAVA_FALLBACK_FONT = "Dialog";
 		ImmutableList<String> fontFamiliesToTry =
 				ImmutableList.of("Arial", "Helvetica", "FreeSans", "Nimbus Sans");
@@ -92,48 +97,15 @@ public class PageDirector implements Paintable {
 	}
 
 
-	private void placeEdgeLegend(Scale<Double, Color> edgeCoding,
-			ImmutableList<Double> edgeLegendLabels) {
-		EdgeWeightLegend legend = new EdgeWeightLegend(EDGE_LEGEND_POSITION, 
-				"Edge Weight: " + dataModel.getEdgeValueAttribute(),
-				edgeCoding, edgeLegendLabels);
-		painter.add(legend);
+	private double calculateMaxNodeRadius() {
+		int maxNodesOnOneSide = 
+				Math.max(
+					dataModel.getLeftNodes().size(), 
+					dataModel.getRightNodes().size());
+		return Math.min(MAX_RADIUS, LEFT_LINE.getLength() / maxNodesOnOneSide);
 	}
 
-	private Scale<Double,Color> makeColorCoding() {
-		if (dataModel.hasWeightedEdges()) {
-			Scale<Double,Color> colorScale = BrightnessScale.createWithDefaultColor();
-			colorScale.train(Iterables.transform(dataModel.getEdges(), Edge.WEIGHT_GETTER));
-			colorScale.doneTraining();
-			return colorScale;
-		} else {
-			return new ConstantColor();
-		}
-	}
-
-	private ImmutableList<Double> chooseNodeLegendLabels(Scale<Double, Double> coding) {
-		return ImmutableList.<Double>builder().add(0.0).addAll(coding.getExtrema()).build();
-	}
-	
-	private ImmutableList<Double> chooseEdgeLegendLabels(Scale<Double,Color> edgeCoding) {
-		return ImmutableList.<Double>builder().add(0.0).addAll(edgeCoding.getExtrema()).build();
-	}
-
-	private void placeNodeLegend(Scale<Double,Double> coding,
-			ImmutableList<Double> labels) {
-		CircleRadiusLegend legend = new CircleRadiusLegend(
-				CIRCLE_LEGEND_POSITION, "Circle Area: "
-						+ dataModel.getNodeValueAttribute(), coding, labels,
-				MAX_RADIUS);
-		painter.add(legend);
-	}
-
-	@Override
-	public void paint(Graphics2D g) {
-		painter.paint(g);
-	}
-
-	private Scale<Double, Double> makeCircleCoding() {
+	private Scale<Double, Double> makeNodeCoding() {
 		if (dataModel.hasWeightedNodes()) {
 			Scale<Double, Double> nodeScale = new ZeroAnchoredCircleRadiusScale(calculateMaxNodeRadius());
 			nodeScale.train(Iterables.transform(dataModel.getLeftNodes(), Node.WEIGHT_GETTER));
@@ -145,8 +117,38 @@ public class PageDirector implements Paintable {
 		}
 	}
 
-	private double calculateMaxNodeRadius() {
-		int maxNodesOnOneSide = Math.max(dataModel.getLeftNodes().size(), dataModel.getRightNodes().size());
-		return Math.min(MAX_RADIUS, LEFT_LINE.getLength() / maxNodesOnOneSide);
+	private Scale<Double,Color> makeEdgeCoding() {
+		if (dataModel.hasWeightedEdges()) {
+			Scale<Double,Color> colorScale = BrightnessScale.createWithDefaultColor();
+			colorScale.train(Iterables.transform(dataModel.getEdges(), Edge.WEIGHT_GETTER));
+			colorScale.doneTraining();
+			return colorScale;
+		} else {
+			return new ConstantColor();
+		}
+	}
+
+	private void makeNodeLegend(Scale<Double,Double> coding) {
+		ImmutableList<Double> labels = 
+				ImmutableList.<Double>builder().add(0.0).addAll(coding.getExtrema()).build();
+		CircleRadiusLegend legend = new CircleRadiusLegend(
+				CIRCLE_LEGEND_POSITION, "Circle Area: "
+						+ dataModel.getNodeValueAttribute(), coding, labels,
+				MAX_RADIUS);
+		painter.add(legend);
+	}
+
+	private void makeEdgeLegend(Scale<Double, Color> edgeCoding) {
+		ImmutableList<Double> edgeLegendLabels = 
+				ImmutableList.<Double>builder().add(0.0).addAll(edgeCoding.getExtrema()).build();
+		EdgeWeightLegend legend = new EdgeWeightLegend(EDGE_LEGEND_POSITION, 
+				"Edge Weight: " + dataModel.getEdgeValueAttribute(),
+				edgeCoding, edgeLegendLabels);
+		painter.add(legend);
+	}
+
+	@Override
+	public void paint(Graphics2D g) {
+		painter.paint(g);
 	}
 }
