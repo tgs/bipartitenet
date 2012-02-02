@@ -4,22 +4,19 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Rectangle2D;
-import java.util.Map;
 
 import math.geom2d.Point2D;
 import math.geom2d.conic.Circle2D;
 import math.geom2d.line.LineSegment2D;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSortedMap;
 
 import edu.iu.sci2.visualization.bipartitenet.PageDirector;
 import edu.iu.sci2.visualization.bipartitenet.scale.Scale;
 
 public class CircleRadiusLegend implements Paintable {
 	private final Scale<Double,Double> coding;
-	private final ImmutableMap<Double, String> labeledValues;
+	private final ImmutableList<Double> labeledValues;
 	private final Point2D topCenter;
 	private final String title;
 	private final double maxRadius;
@@ -33,7 +30,7 @@ public class CircleRadiusLegend implements Paintable {
 	
 	public CircleRadiusLegend(Point2D topCenter, String title,
 			Scale<Double,Double> coding,
-			ImmutableMap<Double, String> labeledValues, double maxRadius) {
+			ImmutableList<Double> labeledValues, double maxRadius) {
 		this.topCenter = topCenter;
 		this.title = title;
 		this.coding = coding;
@@ -59,8 +56,8 @@ public class CircleRadiusLegend implements Paintable {
 
 	private void paintCircles(Graphics2D g) {
 		Point2D legendTopCenter = topCenter.translate(0, LEGEND_Y_OFFSET);
-		for (Map.Entry<Double, String> labeledValue : labeledValues.entrySet()) {
-			double radius = coding.apply(labeledValue.getKey());
+		for (Double value : labeledValues) {
+			double radius = coding.apply(value);
 			// circle center
 			double circleX = legendTopCenter.getX() - maxRadius,
 					circleY = legendTopCenter.getY() + 2 * maxRadius - radius;
@@ -72,17 +69,15 @@ public class CircleRadiusLegend implements Paintable {
 		Point2D labelsTop = topCenter.translate(LABEL_X_OFFSET, LEGEND_Y_OFFSET + 8);
 		LineSegment2D labelLine = new LineSegment2D(labelsTop, labelsTop.translate(0, 2 * maxRadius)); // the line "points" downward
 		
-		ImmutableSortedMap<Double, String> m = ImmutableSortedMap.copyOf(labeledValues);
-		ImmutableList<String> labels = ImmutableList.copyOf(m.values()).reverse(); // in descending order
+		ImmutableList<Double> reversedValues = labeledValues.reverse();
 		
-		
-		int numLabels = labels.size();
+		int numLabels = reversedValues.size();
 		double denominator = Math.max(1, numLabels);
 	
 		g.setFont(LEGEND_FONT);
 		for (int i = 0; i < numLabels; i++) {
 			Point2D labelPoint = labelLine.getPoint(i / denominator);
-			g.drawString(labels.get(i), (float) labelPoint.getX(), (float) labelPoint.getY());
+			g.drawString(reversedValues.get(i).toString(), (float) labelPoint.getX(), (float) labelPoint.getY());
 		}
 			// label position
 //			double labelX = legendTopCenter.getX() + LABEL_X_OFFSET,

@@ -22,7 +22,7 @@ public class EdgeWeightLegend implements Paintable {
 	
 	private static final int LEGEND_Y_OFFSET = 25; // from top of label to top of arrows
 	private static final double ARROW_LENGTH = 40;
-	private static final int BETWEEN_ARROW_Y_OFFSET = 15;
+	private static final int BETWEEN_ARROW_Y_OFFSET = 10;
 	private static final int LABEL_X_OFFSET = 10;
 	private static final int LABEL_Y_OFFSET = 4; // about half the height6 of the legend font
 	
@@ -51,7 +51,6 @@ public class EdgeWeightLegend implements Paintable {
 		Point2D arrowsTopCenter = topCenter.translate(0, LEGEND_Y_OFFSET);
 		Point2D arrowStart = arrowsTopCenter.translate(-ARROW_LENGTH/2, 0);
 		for (Double value : labeledValues.reverse()) {
-			arrowStart = arrowStart.translate(0, BETWEEN_ARROW_Y_OFFSET);
 			Point2D arrowEnd = arrowStart.translate(ARROW_LENGTH, 0);
 			LineSegment2D line = new LineSegment2D(arrowStart, arrowEnd);
 			g.setColor(coding.apply(value));
@@ -60,6 +59,7 @@ public class EdgeWeightLegend implements Paintable {
 			
 			Point2D labelPoint = arrowEnd.translate(LABEL_X_OFFSET, LABEL_Y_OFFSET);
 			gForLabels.drawString(value.toString(), (float) labelPoint.getX(), (float) labelPoint.getY());
+			arrowStart = arrowStart.translate(0, BETWEEN_ARROW_Y_OFFSET);
 		}
 		
 	}

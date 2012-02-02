@@ -3,13 +3,11 @@ package edu.iu.sci2.visualization.bipartitenet;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.util.List;
 
 import math.geom2d.Point2D;
 import math.geom2d.line.LineSegment2D;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 import edu.iu.sci2.visualization.bipartitenet.component.CircleRadiusLegend;
@@ -54,7 +52,7 @@ public class PageDirector implements Paintable {
 		Scale<Double,Color> edgeCoding = makeColorCoding();
 		
 		if (dataModel.hasWeightedNodes()) {
-			ImmutableMap<Double, String> legendLabels = chooseNodeLegendLabels();
+			ImmutableList<Double> legendLabels = chooseNodeLegendLabels(coding);
 			placeNodeLegend(coding, legendLabels);
 		}
 
@@ -97,19 +95,16 @@ public class PageDirector implements Paintable {
 		}
 	}
 
-	private ImmutableMap<Double, String> chooseNodeLegendLabels() {
-		double max = getMaxNodeValue();
-		double half = max / 2;
-		// maybe use the decimal format choosing from geomaps?
-		return ImmutableMap.of(0.0, "0.0", half, ""+half, max, ""+max);
+	private ImmutableList<Double> chooseNodeLegendLabels(Scale<Double, Double> coding) {
+		return ImmutableList.<Double>builder().add(0.0).addAll(coding.getExtrema()).build();
 	}
 	
 	private ImmutableList<Double> chooseEdgeLegendLabels(Scale<Double,Color> edgeCoding) {
-		return edgeCoding.getExtrema();
+		return ImmutableList.<Double>builder().add(0.0).addAll(edgeCoding.getExtrema()).build();
 	}
 
 	private void placeNodeLegend(Scale<Double,Double> coding,
-			ImmutableMap<Double, String> labels) {
+			ImmutableList<Double> labels) {
 		CircleRadiusLegend legend = new CircleRadiusLegend(
 				CIRCLE_LEGEND_POSITION, "Circle Area: "
 						+ dataModel.getNodeValueAttribute(), coding, labels,
@@ -134,16 +129,6 @@ public class PageDirector implements Paintable {
 		}
 	}
 
-	private double getMaxNodeValue() {
-		double biggest;
-		List<Node> leftNodes = dataModel.getLeftNodes(),
-				rightNodes = dataModel.getRightNodes();
-		
-		biggest = Math.max(leftNodes.get(0).getValue(),
-				rightNodes.get(0).getValue());
-		return biggest;
-	}
-	
 	private double calculateMaxNodeRadius() {
 		int maxNodesOnOneSide = Math.max(dataModel.getLeftNodes().size(), dataModel.getRightNodes().size());
 		return Math.min(MAX_RADIUS, LEFT_LINE.getLength() / maxNodesOnOneSide);
