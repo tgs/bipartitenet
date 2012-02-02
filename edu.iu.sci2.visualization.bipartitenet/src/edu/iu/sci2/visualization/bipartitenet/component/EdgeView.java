@@ -44,7 +44,7 @@ public class EdgeView implements Paintable {
 		
 	}
 
-	private void drawArrowHead(AbstractLine2D line, Graphics2D g) {
+	public static void drawArrowHead(AbstractLine2D line, Graphics2D g) {
 		Point2D end = line.getLastPoint();
 		Point2D colinearPoint = line.getPoint(1 - (ARROW_HEAD_SIDE_LENGTH / line.getLength()));
 		Point2D cwPoint = colinearPoint.transform(AffineTransform2D.createRotation(end, Math.PI / 6));

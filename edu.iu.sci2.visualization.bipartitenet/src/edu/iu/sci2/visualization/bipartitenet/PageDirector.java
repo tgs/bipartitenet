@@ -8,10 +8,12 @@ import java.util.List;
 import math.geom2d.Point2D;
 import math.geom2d.line.LineSegment2D;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 import edu.iu.sci2.visualization.bipartitenet.component.CircleRadiusLegend;
+import edu.iu.sci2.visualization.bipartitenet.component.EdgeWeightLegend;
 import edu.iu.sci2.visualization.bipartitenet.component.Paintable;
 import edu.iu.sci2.visualization.bipartitenet.component.PaintableContainer;
 import edu.iu.sci2.visualization.bipartitenet.component.RightAlignedLabel;
@@ -30,7 +32,6 @@ public class PageDirector implements Paintable {
 
 	public static final int PAGE_HEIGHT = 800;
 	public static final int PAGE_WIDTH = 800;
-	// TODO: a better place for this to live?
 	public static final int MAX_RADIUS = 15;
 
 	private static final LineSegment2D LEFT_LINE = new LineSegment2D(300, 100,
@@ -44,15 +45,24 @@ public class PageDirector implements Paintable {
 	private static final Point2D CIRCLE_LEGEND_POSITION = new Point2D(250, 600);
 	private static final Point2D LEFT_TITLE_POSITION = LEFT_LINE.getFirstPoint().translate(MAX_RADIUS, -50);
 	private static final Point2D RIGHT_TITLE_POSITION = RIGHT_LINE.getFirstPoint().translate(- MAX_RADIUS, -50);
+	private static final Point2D EDGE_LEGEND_POSITION = new Point2D(550, 600);
 
 	public PageDirector(final BipartiteGraphDataModel dataModel, final String leftSideType, String leftSideTitle, final String rightSideType, final String rightSideTitle) {
 		this.dataModel = dataModel;
 
 		Scale<Double,Double> coding = makeCircleCoding();
 		Scale<Double,Color> edgeCoding = makeColorCoding();
-		ImmutableMap<Double, String> legendLabels = chooseLegendLabels();
-		placeLegends(coding, legendLabels);
+		
+		if (dataModel.hasWeightedNodes()) {
+			ImmutableMap<Double, String> legendLabels = chooseNodeLegendLabels();
+			placeNodeLegend(coding, legendLabels);
+		}
 
+		if (dataModel.hasWeightedEdges()) {
+			ImmutableList<Double> edgeLegendLabels = chooseEdgeLegendLabels(edgeCoding);
+			placeEdgeLegend(edgeCoding, edgeLegendLabels);
+		}
+		
 		BipartiteGraphRenderer renderer = new BipartiteGraphRenderer(dataModel,
 				LEFT_LINE, RIGHT_LINE, coding, edgeCoding);
 		painter.add(renderer);
@@ -67,6 +77,15 @@ public class PageDirector implements Paintable {
 		});
 	}
 
+
+	private void placeEdgeLegend(Scale<Double, Color> edgeCoding,
+			ImmutableList<Double> edgeLegendLabels) {
+		EdgeWeightLegend legend = new EdgeWeightLegend(EDGE_LEGEND_POSITION, 
+				"Edge Weight: " + dataModel.getEdgeValueAttribute(),
+				edgeCoding, edgeLegendLabels);
+		painter.add(legend);
+	}
+
 	private Scale<Double,Color> makeColorCoding() {
 		if (dataModel.hasWeightedEdges()) {
 			Scale<Double,Color> colorScale = BrightnessScale.createWithDefaultColor();
@@ -78,14 +97,18 @@ public class PageDirector implements Paintable {
 		}
 	}
 
-	private ImmutableMap<Double, String> chooseLegendLabels() {
+	private ImmutableMap<Double, String> chooseNodeLegendLabels() {
 		double max = getMaxNodeValue();
 		double half = max / 2;
 		// maybe use the decimal format choosing from geomaps?
 		return ImmutableMap.of(0.0, "0.0", half, ""+half, max, ""+max);
 	}
+	
+	private ImmutableList<Double> chooseEdgeLegendLabels(Scale<Double,Color> edgeCoding) {
+		return edgeCoding.getExtrema();
+	}
 
-	private void placeLegends(Scale<Double,Double> coding,
+	private void placeNodeLegend(Scale<Double,Double> coding,
 			ImmutableMap<Double, String> labels) {
 		CircleRadiusLegend legend = new CircleRadiusLegend(
 				CIRCLE_LEGEND_POSITION, "Circle Area: "

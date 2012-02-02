@@ -1,5 +1,7 @@
 package edu.iu.sci2.visualization.bipartitenet.scale;
 
+import com.google.common.collect.ImmutableList;
+
 
 public class ConstantCircleRadius implements Scale<Double, Double> {
 	private Double radius;
@@ -21,5 +23,10 @@ public class ConstantCircleRadius implements Scale<Double, Double> {
 	@Override
 	public void doneTraining() {
 		// Do nothing
+	}
+
+	@Override
+	public ImmutableList<Double> getExtrema() {
+		return ImmutableList.of();
 	}
 }

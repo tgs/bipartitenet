@@ -2,6 +2,8 @@ package edu.iu.sci2.visualization.bipartitenet.scale;
 
 import java.awt.Color;
 
+import com.google.common.collect.ImmutableList;
+
 
 public class ConstantColor implements Scale<Double, Color> {
 	@Override
@@ -19,4 +21,8 @@ public class ConstantColor implements Scale<Double, Color> {
 		// do nothing
 	}
 
+	@Override
+	public ImmutableList<Double> getExtrema() {
+		return ImmutableList.of();
+	}
 }
