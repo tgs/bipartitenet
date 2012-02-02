@@ -11,27 +11,20 @@ public class Node {
 			return it.getValue();
 		}
 	};
-	public static final Ordering<Node> VALUE_ORDERING = new Ordering<Node>() {
-		@Override
-		public int compare(Node a, Node b) {
-			// decreasing
-			return - Double.compare(a.getValue(), b.getValue());
-		}
-	};
+	public static final Ordering<Node> VALUE_ORDERING = Ordering.natural().onResultOf(VALUE_GETTER);
 	
-	private final double dataValue;
+	private final String label;
+	private final double weight;
 	private final NodeDestination destination;
 
-	private final String label;
 
 	public Node(String label, double weight, NodeDestination destination) {
-		super();
 		if (label == null) {
 			throw new NullPointerException("Label must not be null");
 		}
 		this.destination = destination;
 		this.label = label;
-		this.dataValue = weight;
+		this.weight = weight;
 	}
 
 	public String getLabel() {
@@ -39,19 +32,19 @@ public class Node {
 	}
 
 	public double getValue() {
-		return dataValue;
-	}
-
-	@Override
-	public String toString() {
-		return Objects.toStringHelper(this)
-				.add("label", label)
-				.add("side", destination)
-				.add("value", dataValue)
-				.toString();
+		return weight;
 	}
 
 	public NodeDestination getDestination() {
 		return destination;
+	}
+	
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this)
+				.add("label", label)
+				.add("value", weight)
+				.add("side", destination)
+				.toString();
 	}
 }

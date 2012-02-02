@@ -23,8 +23,7 @@ import edu.iu.nwb.util.nwbfile.NWBFileParser;
 import edu.iu.nwb.util.nwbfile.NWBFileUtilities;
 import edu.iu.nwb.util.nwbfile.ParsingException;
 
-public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
-		ParameterMutator {
+public class BipartiteNetAlgorithmFactory implements AlgorithmFactory, ParameterMutator {
 	private static final String NO_EDGE_WEIGHT_OPTION = "No edge weight";
 	private static final String NO_NODE_WEIGHT_OPTION = "No node weight";
 	private static final String LEFT_SIDE_TYPE_ID = "leftSideType";
@@ -46,17 +45,17 @@ public class BipartiteNetAlgorithmFactory implements AlgorithmFactory,
 		String rightSideType = types.get(0);
 		
 		String leftSideTitle = (String) parameters.get(LEFT_COLUMN_TITLE_ID);
-		leftSideTitle = leftSideTitle.isEmpty() ? leftSideType : leftSideTitle;
+		leftSideTitle = leftSideTitle.trim().isEmpty() ? leftSideType : leftSideTitle;
 		String rightSideTitle = (String) parameters.get(RIGHT_COLUMN_TITLE_ID);
-		rightSideTitle = rightSideTitle.isEmpty() ? rightSideType : rightSideTitle;
+		rightSideTitle = rightSideTitle.trim().isEmpty() ? rightSideType : rightSideTitle;
 		
 		String nodeWeightColumn = (String) parameters.get(NODE_SIZE_COLUMN_ID);
-		if (nodeWeightColumn == NO_NODE_WEIGHT_OPTION) {
+		if (NO_NODE_WEIGHT_OPTION.equals(nodeWeightColumn)) {
 			nodeWeightColumn = null;
 		}
 		
 		String edgeWeightColumn = (String) parameters.get(EDGE_WEIGHT_COLUMN_ID);
-		if (edgeWeightColumn == NO_EDGE_WEIGHT_OPTION) {
+		if (NO_EDGE_WEIGHT_OPTION.equals(edgeWeightColumn)) {
 			edgeWeightColumn = null;
 		}
 		

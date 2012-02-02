@@ -13,7 +13,8 @@ import edu.iu.sci2.visualization.bipartitenet.component.NodeView;
 
 public enum NodeDestination {
 	LEFT {
-
+		/* TODO Extract bits that don't vary per node.. per side even? */
+		
 		@Override
 		public void paintLabel(NodeView nv, Graphics2D g, double maxHeight) {
 			TextLayout layout = fitTextLayout(nv.getLabel(), g, maxHeight);
@@ -49,30 +50,41 @@ public enum NodeDestination {
 		}
 	};
 
+	private static final int MINIMUM_FONT_SIZE = 2;
 	private static final Font LABEL_FONT = PageDirector.BASIC_FONT;
 	public abstract void paintLabel(NodeView nv, Graphics2D g, double maxHeight);
 	public abstract Color getFillColor();
 	
 	
 	private static TextLayout fitTextLayout(String label, Graphics2D g, double maxHeight) {
-		Font currentFont = LABEL_FONT;
 		FontRenderContext frc = g.getFontRenderContext();
-		for (int fontSize = LABEL_FONT.getSize() ; fontSize > 1; fontSize--) {
+		Font currentFont = fitFontWithinHeight(frc, maxHeight);
+		
+		return new TextLayout(label, currentFont, frc);
+	}
+	
+	private static Font fitFontWithinHeight(FontRenderContext frc, double maxHeight) {
+		Font currentFont = LABEL_FONT;
+		for (int fontSize = LABEL_FONT.getSize() ; fontSize >= MINIMUM_FONT_SIZE; fontSize--) {
 			currentFont = LABEL_FONT.deriveFont(LABEL_FONT.getStyle(), fontSize);
-			TextLayout tl = new TextLayout("Alg", currentFont, frc); // risers and descenders
+			TextLayout tl = new TextLayout("Alg", currentFont, frc); // "Alg" is a good height test with its risers and descenders
 			Rectangle2D textBounds = tl.getBounds();
+			// "+1" to leave a bit of a margin
 			if (textBounds.getHeight() + 1 < maxHeight) {
 				break;
 			}
 		}
 		
-		return new TextLayout(label, currentFont, frc);
+		return currentFont;
 	}
 	
 	private static float getFontCenterHeight(Graphics2D g) {
 		 LineMetrics lm = g.getFont().getLineMetrics("Asdf", g.getFontRenderContext());
 		 
 //		 return lm.getAscent() / 2;
+		 /* TODO The method name makes it sound like this will be a positive number, will it?
+		  * If not, rename the method.
+		  */
 		 return - lm.getStrikethroughOffset();
 	}
 }

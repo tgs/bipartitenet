@@ -32,26 +32,10 @@ public class PageDirector implements Paintable {
 	public static final int PAGE_WIDTH = 800;
 	public static final int MAX_RADIUS = 15;
 
-	private static final LineSegment2D LEFT_LINE = new LineSegment2D(300, 100,
-			300, 500);
-	private static final LineSegment2D RIGHT_LINE = new LineSegment2D(500, 100,
-			500, 500);
+	private static final LineSegment2D LEFT_LINE = new LineSegment2D(300, 100, 300, 500);
+	private static final LineSegment2D RIGHT_LINE = new LineSegment2D(500, 100, 500, 500);
 	
-	public static final Font BASIC_FONT;
-	static {
-		ImmutableList<String> fontFamiliesToTry = ImmutableList.of("Arial", "Helvetica", 
-				"FreeSans", "Nimbus Sans", "Dialog");
-		Font thisFont = new Font("Dialog", Font.PLAIN, 12);
-		for (String family : fontFamiliesToTry) {
-			thisFont = new Font(family, Font.PLAIN, 12);
-			if (! thisFont.getFamily().equals("Dialog")) {
-				// found one that the system has!
-				break;
-			}
-		}
-		BASIC_FONT = thisFont;
-		
-	}
+	public static final Font BASIC_FONT = pickFont();
 	private static final Font TITLE_FONT = BASIC_FONT.deriveFont(Font.BOLD, 16);
 
 	private static final Point2D CIRCLE_LEGEND_POSITION = new Point2D(250, 600);
@@ -87,6 +71,24 @@ public class PageDirector implements Paintable {
 				g.drawString(rightSideTitle, (float) RIGHT_TITLE_POSITION.getX(), (float) RIGHT_TITLE_POSITION.getY());
 			}
 		});
+	}
+
+
+	private static Font pickFont() { // TODO name
+		final String JAVA_FALLBACK_FONT = "Dialog";
+		ImmutableList<String> fontFamiliesToTry =
+				ImmutableList.of("Arial", "Helvetica", "FreeSans", "Nimbus Sans");
+		
+		Font thisFont = new Font(JAVA_FALLBACK_FONT, Font.PLAIN, 12);
+		for (String family : fontFamiliesToTry) {
+			thisFont = new Font(family, Font.PLAIN, 12);
+			if (! thisFont.getFamily().equals(JAVA_FALLBACK_FONT)) {
+				// found one that the system has!
+				break;
+			}
+		}
+		
+		return thisFont;
 	}
 
 

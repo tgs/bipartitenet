@@ -18,37 +18,62 @@ import edu.iu.nwb.util.nwbfile.ParsingException;
 
 public class NWBDataImporter {
 
+	private final String nodeTypeCol;
+	private final String nodeWeightCol;
+	private final String typeForLeftSide;
+	private final LogService log;
+	private final String edgeWeightCol;
+
+	public NWBDataImporter(String nodeTypeCol, String typeForLeftSide,
+			String nodeSizeCol, String edgeValueCol) {
+		this(nodeTypeCol, typeForLeftSide, nodeSizeCol, edgeValueCol, null);		
+	}
+	
+	public NWBDataImporter(String nodeTypeCol, String typeForLeftSide,
+			String nodeWeightCol, String edgeWeightCol, LogService log) {
+		this.nodeTypeCol = nodeTypeCol;
+		this.typeForLeftSide = typeForLeftSide;
+		this.nodeWeightCol = nodeWeightCol;
+		this.edgeWeightCol = edgeWeightCol;
+		this.log = log;
+	}
+
+	private void log(int level, String message) {
+		if (log != null) {
+			log.log(level, message);
+		}
+	}
+
+	public BipartiteGraphDataModel constructModelFromFile(InputStream nwbData)
+			throws IOException, ParsingException {
+		ParserHandler handler = new ParserHandler();
+		NWBFileParser parser = new NWBFileParser(nwbData);
+		parser.parse(handler);
+		return handler.constructGraphDataModel();
+	}
+
 	private class ParserHandler implements NWBFileParserHandler {
 		private Map<Integer, Node> nodeById = Maps.newHashMap();
-		private List<Node> allNodes = Lists.newArrayList();
 		private List<Edge> edges = Lists.newArrayList();
 		private boolean gotAnyLeftNodes = false;
 		private boolean gotAnyRightNodes = false;
-
+	
 		@Override
 		public void addComment(String comment) {
 		}
-
-		@Override
-		public void addDirectedEdge(int sourceNode, int targetNode,
-				Map<String, Object> attributes) {
-			// we re-direct the edges so they're always left->right.
-			addUndirectedEdge(sourceNode, targetNode, attributes);
-		}
-
+	
 		@Override
 		public void addNode(int id, String label, Map<String, Object> attributes) {
-			double weight;
-			
-			String nodeSizeCol = getNodeSizeCol();
-			if (nodeSizeCol != null) {
-				weight = NumberUtilities.interpretObjectAsDouble(attributes.get(getNodeSizeCol()));
+			double weight;			
+			if (nodeWeightCol != null) {
+				weight = NumberUtilities.interpretObjectAsDouble(attributes.get(nodeWeightCol));
 			} else {
 				weight = 1;
 			}
-			String type = (String) attributes.get(getNodeTypeCol());
+			
+			String type = (String) attributes.get(nodeTypeCol);
 			NodeDestination dest;
-			if (getTypeThatIsLeft().equalsIgnoreCase(type)) {
+			if (typeForLeftSide.equalsIgnoreCase(type)) {
 				dest = NodeDestination.LEFT;
 				gotAnyLeftNodes = true;
 			} else {
@@ -56,19 +81,22 @@ public class NWBDataImporter {
 				gotAnyRightNodes = true;
 			}
 			
-			Node nodeObj = new Node(label,
-					weight, dest);
-			allNodes.add(nodeObj);
+			Node nodeObj = new Node(label, weight, dest);
 			nodeById.put(id, nodeObj);
 		}
 
 		@Override
-		public void addUndirectedEdge(int node1, int node2,
+		public void addDirectedEdge(int sourceNode, int targetNode,
 				Map<String, Object> attributes) {
+			// Ignore original direction of directed edges so they're always left->right.    TODO rethink
+			addUndirectedEdge(sourceNode, targetNode, attributes);
+		}
+	
+		@Override
+		public void addUndirectedEdge(int node1, int node2,	Map<String, Object> attributes) {
+			// Determine left and right
 			Node left, right, something;
-			double value;
-			something = nodeById.get(node1);
-			
+			something = nodeById.get(node1);			
 			if (something.getDestination() == NodeDestination.LEFT) {
 				left = something;
 				right = nodeById.get(node2);
@@ -82,10 +110,10 @@ public class NWBDataImporter {
 						left, right));
 			}
 			
-			
-			String edgeValueCol = getEdgeValueCol();
-			if (edgeValueCol != null) {
-				value = NumberUtilities.interpretObjectAsDouble(attributes.get(edgeValueCol));
+			// Find the edge weight
+			double value;
+			if (edgeWeightCol != null) {
+				value = NumberUtilities.interpretObjectAsDouble(attributes.get(edgeWeightCol));
 			} else {
 				value = 1;
 			}
@@ -95,121 +123,65 @@ public class NWBDataImporter {
 
 		@Override
 		public void finishedParsing() {
-
+	
 		}
-
+	
 		@Override
 		public boolean haltParsingNow() {
 			return false;
 		}
-
+	
 		@Override
 		public void setDirectedEdgeCount(int numberOfEdges) {
+		}
+	
+		@Override
+		public void setUndirectedEdgeCount(int numberOfEdges) {
 		}
 
 		@Override
 		public void setDirectedEdgeSchema(LinkedHashMap<String, String> schema) {
 			checkEdgeSchema(schema);
 		}
-
-		@Override
-		public void setNodeCount(int numberOfNodes) {
-		}
-
-		@Override
-		public void setNodeSchema(LinkedHashMap<String, String> schema) {
-			if (getNodeSizeCol() != null && ! schema.containsKey(getNodeSizeCol())) {
-				throw new IllegalArgumentException(
-						String.format("Node schema should contain attribute %s (for node size), but does not.",
-								getNodeSizeCol()));
-			}
-			if (! schema.containsKey(getNodeTypeCol())) {
-				throw new IllegalArgumentException(
-						String.format("Node schema should contain attribute %s (for node type), but does not.",
-								getNodeTypeCol()));
-			}
-		}
-
-		@Override
-		public void setUndirectedEdgeCount(int numberOfEdges) {
-		}
-
+	
 		@Override
 		public void setUndirectedEdgeSchema(LinkedHashMap<String, String> schema) {
 			checkEdgeSchema(schema);
 		}
 
 		private void checkEdgeSchema(LinkedHashMap<String, String> schema) {
-			if (getEdgeValueCol() != null && ! schema.containsKey(getEdgeValueCol())) {
-				throw new IllegalArgumentException(
-						String.format("Edge schema should contain attribute %s (for edge weight), but does not.",
-								getNodeSizeCol()));
-				
-			}
+			/* The edge weight column should come from a list of all edge columns put together in
+			 * mutateParameters. */
+			assert ((edgeWeightCol == null) || (schema.containsKey(edgeWeightCol)));
 		}
 
+		@Override
+		public void setNodeCount(int numberOfNodes) {
+		}
+	
+		@Override
+		public void setNodeSchema(LinkedHashMap<String, String> schema) {
+			/* The node weight column should come from a list of all node columns put together in
+			 * mutateParameters. */
+			assert ((nodeWeightCol == null) || (schema.containsKey(nodeWeightCol)));
+			
+			// TODO explain
+			assert (schema.containsKey(nodeTypeCol));
+		}
+	
 		public BipartiteGraphDataModel constructGraphDataModel() {
+			// TODO be specific, which type is missing?			
 			if (! gotAnyLeftNodes) {
 				log(LogService.LOG_WARNING, "Supposedly bipartite graph has no left-hand nodes");
 			}
 			if (! gotAnyRightNodes) {
 				log(LogService.LOG_WARNING, "Supposedly bipartite graph has no right-hand nodes");
 			}
-			return new BipartiteGraphDataModel(allNodes, edges, getNodeSizeCol(), getEdgeValueCol());
+			
+			// TODO could both types be absent?  exception, warning?
+			
+			return new BipartiteGraphDataModel(nodeById.values(), edges, nodeWeightCol, edgeWeightCol);
 		}
-
-	}
-
-	private final String nodeTypeCol;
-	private final String nodeSizeCol;
-	private final String typeThatIsLeft;
-	LogService log = null;
-	private final String edgeValueCol;
-
-	public NWBDataImporter(String nodeTypeCol, String typeThatIsLeft,
-			String nodeSizeCol, String edgeValueCol) {
-		this.nodeTypeCol = nodeTypeCol;
-		this.typeThatIsLeft = typeThatIsLeft;
-		this.nodeSizeCol = nodeSizeCol;
-		this.edgeValueCol = edgeValueCol;
-	}
 	
-	public void log(int level, String message) {
-		if (log != null) {
-			log.log(level, message);
-		}
-	}
-
-	public NWBDataImporter(String nodeTypeCol, String typeThatIsLeft,
-			String nodeSizeCol, String edgeValueCol, LogService log) {
-		this.nodeTypeCol = nodeTypeCol;
-		this.typeThatIsLeft = typeThatIsLeft;
-		this.nodeSizeCol = nodeSizeCol;
-		this.edgeValueCol = edgeValueCol;
-		this.log = log;
-	}
-
-	public BipartiteGraphDataModel constructModelFromFile(InputStream nwbData)
-			throws IOException, ParsingException {
-		ParserHandler handler = new ParserHandler();
-		NWBFileParser parser = new NWBFileParser(nwbData);
-		parser.parse(handler);
-		return handler.constructGraphDataModel();
-	}
-
-	public String getNodeSizeCol() {
-		return nodeSizeCol;
-	}
-
-	public String getNodeTypeCol() {
-		return nodeTypeCol;
-	}
-
-	public String getTypeThatIsLeft() {
-		return typeThatIsLeft;
-	}
-
-	public String getEdgeValueCol() {
-		return edgeValueCol;
 	}
 }

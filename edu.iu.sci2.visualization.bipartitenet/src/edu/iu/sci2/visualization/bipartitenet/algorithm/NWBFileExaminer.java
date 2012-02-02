@@ -11,7 +11,7 @@ import com.google.common.collect.Sets;
 import edu.iu.nwb.util.nwbfile.GetNWBFileMetadata;
 import edu.iu.nwb.util.nwbfile.NWBFileProperty;
 
-public class NWBFileExaminer extends GetNWBFileMetadata {
+class NWBFileExaminer extends GetNWBFileMetadata {
 	private static final String TYPE_COLUMN = "bipartitetype";
 	private final Set<String> bipartiteTypes = Sets.newHashSet();
 
