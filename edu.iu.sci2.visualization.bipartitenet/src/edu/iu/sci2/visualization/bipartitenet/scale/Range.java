@@ -5,7 +5,8 @@ import com.google.common.collect.Ordering;
 /**
  * Keeps track of the maximum and minimum values that it has seen.
  * <p>
- * Calls to {@code getMin} or {@code getMax} will fail with {@code IllegalStateException}
+ * Calls to {@code getMin} or {@code getMax} will fail with {@code IllegalStateException} 
+ * if no non-null data points have been added.
  * 
  * 
  * @author thgsmith
@@ -13,9 +14,10 @@ import com.google.common.collect.Ordering;
  * @param <T> the type of values that it will be considering
  */
 public class Range<T> {
+	private final Ordering<? super T> ordering;
+
 	private T min = null;
 	private T max = null;
-	private final Ordering<? super T> ordering;
 	
 	private Range(Ordering<? super T> ordering) {
 		this.ordering = ordering;
@@ -35,8 +37,8 @@ public class Range<T> {
 	 * you can use this factory method to create a Range.
 	 * @return a Range that will compare your values using {@link Ordering#natural()}
 	 */
-	public static <T extends Comparable<T>> Range<T> create() {
-		return new Range<T>(Ordering.<T>natural());
+	public static <T extends Comparable<? super T>> Range<T> create() {
+		return createWithOrdering(Ordering.<T>natural());
 	}
 	
 	/**
