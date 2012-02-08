@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 
-public abstract class AbstractZeroAnchoredScale<T> implements Scale<Double, T> {
+public class BasicZeroAnchoredScale implements Scale<Double, Double> {
 	private final double minResult;
 	private final double maxResult;
 	
@@ -13,7 +13,7 @@ public abstract class AbstractZeroAnchoredScale<T> implements Scale<Double, T> {
 	private boolean doneTraining = false;
 	private final Range<Double> dataRange = Range.create();
 	
-	public AbstractZeroAnchoredScale(double minResult, double maxResult) {
+	public BasicZeroAnchoredScale(double minResult, double maxResult) {
 		this.minResult = minResult;
 		this.maxResult = maxResult;
 	}
@@ -31,7 +31,8 @@ public abstract class AbstractZeroAnchoredScale<T> implements Scale<Double, T> {
 		this.doneTraining = true;
 	}
 
-	protected double doApply(double value) {
+	@Override
+	public Double apply(Double value) {
 		return value * slope + intercept;
 	}
 
@@ -39,5 +40,4 @@ public abstract class AbstractZeroAnchoredScale<T> implements Scale<Double, T> {
 	public ImmutableList<Double> getExtrema() {
 		return ImmutableList.of(dataRange.getMin(), dataRange.getMax());
 	}
-
 }
