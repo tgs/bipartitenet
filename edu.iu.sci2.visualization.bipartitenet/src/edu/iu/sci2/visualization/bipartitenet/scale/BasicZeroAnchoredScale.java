@@ -3,27 +3,43 @@ package edu.iu.sci2.visualization.bipartitenet.scale;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-
+/**
+ * A linear scale for producing predictable output values from bounded input values.
+ * <p>
+ * The two parameters to the constructor are the bounds of the output values that you want.  For
+ * instance, if you call {@code scale = new BasicZeroAnchoredScale(0, 10)}, your {@code scale} will
+ * produce only numbers between 0 and 10 inclusive, if it is used correctly.
+ * <p>
+ * To get this behavior, the following restrictions must be met:
+ * <ol>
+ * <li>The input must not contain any negative values.</li>
+ * <li>The Scale must be trained on at least the maximum input value that you will be applying the
+ * Scale to (it should really be trained on all input data)</li>
+ * </ol>
+ *    
+ * @author thgsmith
+ *
+ */
 public class BasicZeroAnchoredScale implements Scale<Double, Double> {
-	private final double minResult;
-	private final double maxResult;
+	private final double resultForZero;
+	private final double resultForMax;
 	
 	private double slope;
 	private double intercept;
 	private boolean doneTraining = false;
 	private final Range<Double> dataRange = Range.create();
 	
-	public BasicZeroAnchoredScale(double minResult, double maxResult) {
-		this.minResult = minResult;
-		this.maxResult = maxResult;
+	public BasicZeroAnchoredScale(double resultForZero, double resultForMax) {
+		this.resultForZero = resultForZero;
+		this.resultForMax = resultForMax;
 	}
 	
 	@Override
 	public void train(Iterable<Double> trainingData) {
 		Preconditions.checkState(! doneTraining, "Tried to add more training data after done training!");
 		dataRange.considerAll(trainingData);
-		this.slope = (maxResult - minResult) / dataRange.getMax();
-		this.intercept = minResult;
+		this.slope = (resultForMax - resultForZero) / dataRange.getMax() - 0;
+		this.intercept = resultForZero;
 	}
 	
 	@Override
