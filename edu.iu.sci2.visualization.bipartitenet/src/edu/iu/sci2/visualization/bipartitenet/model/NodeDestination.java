@@ -23,7 +23,7 @@ public enum NodeDestination {
 					- nv.getCenterToTextDistance() - textBounds.getWidth();
 
 			layout.draw(g, (float) x, (float) (nv.getNodeCenter().getY()
-					+ getFontCenterHeight(g)));
+					- getFontCenterHeight(g)));
 		}
 
 		@Override
@@ -40,7 +40,7 @@ public enum NodeDestination {
 			double x = nv.getNodeCenter().getX() + nv.getCenterToTextDistance();
 			
 			layout.draw(g, (float) x, (float) (nv.getNodeCenter().getY()
-					+ getFontCenterHeight(g)));
+					- getFontCenterHeight(g)));
 		}
 
 		@Override
@@ -80,11 +80,6 @@ public enum NodeDestination {
 	
 	private static float getFontCenterHeight(Graphics2D g) {
 		 LineMetrics lm = g.getFont().getLineMetrics("Asdf", g.getFontRenderContext());
-		 
-//		 return lm.getAscent() / 2;
-		 /* TODO The method name makes it sound like this will be a positive number, will it?
-		  * If not, rename the method.
-		  */
-		 return - lm.getStrikethroughOffset();
+		 return lm.getStrikethroughOffset();
 	}
 }
