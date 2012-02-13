@@ -3,10 +3,12 @@ package edu.iu.sci2.visualization.bipartitenet.scale;
 import com.google.common.collect.ImmutableList;
 
 public class ZeroAnchoredCircleRadiusScale implements Scale<Double,Double> {
+	// Don't want any nodes to be totally invisible (radius 0)
+	private static final double MIN_RADIUS = 1;
 	private final BasicZeroAnchoredScale areaScale;
+	
 	public ZeroAnchoredCircleRadiusScale(double maxRadius) {
-		// TODO explain or make constant "1"
-		areaScale = new BasicZeroAnchoredScale(1, Math.PI * maxRadius * maxRadius);
+		areaScale = new BasicZeroAnchoredScale(MIN_RADIUS, Math.PI * maxRadius * maxRadius);
 	}
 
 	@Override
