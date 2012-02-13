@@ -27,7 +27,6 @@ public class ConstantCircleRadius implements Scale<Double, Double> {
 
 	@Override
 	public ImmutableList<Double> getExtrema() {
-		// TODO
-		return ImmutableList.of();
+		throw new UnsupportedOperationException();
 	}
 }

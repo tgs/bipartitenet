@@ -7,8 +7,12 @@ public interface Scale<I,O> extends Function<I,O> {
 	/**
 	 * Returns the minimum and maximum input values that have been submitted to {@code train(...)}.
 	 * The ImmutableList is exactly two elements long.
+	 * <p>
+	 * This operation is not required to be supported, if the Scale completely ignores its input
+	 * values.
 	 * @return a 2-element list containing the minimum and maximum values.
 	 * @throws IllegalStateException if the Scale has not been trained yet
+	 * @throws UnsupportedOperationException if the Scale ignores its inputs
 	 */
 	ImmutableList<I> getExtrema();
 	
