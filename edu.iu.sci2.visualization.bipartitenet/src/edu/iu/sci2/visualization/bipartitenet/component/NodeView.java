@@ -13,6 +13,8 @@ import edu.iu.sci2.visualization.bipartitenet.scale.Scale;
 public class NodeView implements Paintable {
 	private final Node node;
 	private final Point2D nodeCenter;
+	
+	// TODO remove this, rely on Node's
 	private final NodeDestination leftRightDifference;
 	private final Scale<Double,Double> coding;
 	public static final int NODE_TEXT_PADDING = 8;

@@ -25,7 +25,7 @@ public class CircleRadiusLegend implements Paintable {
 	private static final Font LEGEND_FONT = PageDirector.BASIC_FONT.deriveFont(Font.PLAIN, 10);
 	
 	private static final int LABEL_X_OFFSET = 5; // from outer edge of circles to the labels
-	private static final int LEGEND_Y_OFFSET = 25; // from top of label to top of circles
+	private static final int LEGEND_Y_OFFSET = 25; // from top of title to top of circles
 	
 	
 	public CircleRadiusLegend(Point2D topCenter, String title,
@@ -41,12 +41,13 @@ public class CircleRadiusLegend implements Paintable {
 
 	@Override
 	public void paint(Graphics2D g) {
-		paintLabel(g);
+		paintTitle(g);
 		paintCircles(g);
 		paintDataLabels(g);
 	}
 
-	private void paintLabel(Graphics2D g) {
+	private void paintTitle(Graphics2D g) {
+		// TODO Use drawString?
 		GlyphVector titleGV = TITLE_FONT.createGlyphVector(g.getFontRenderContext(), title);
 		Rectangle2D bounds = titleGV.getVisualBounds();
 		float x = (float) (topCenter.getX() - bounds.getCenterX());
@@ -78,24 +79,6 @@ public class CircleRadiusLegend implements Paintable {
 		for (int i = 0; i < numLabels; i++) {
 			Point2D labelPoint = labelLine.getPoint(i / denominator);
 			g.drawString(reversedValues.get(i).toString(), (float) labelPoint.getX(), (float) labelPoint.getY());
-		}
-			// label position
-//			double labelX = legendTopCenter.getX() + LABEL_X_OFFSET,
-//					labelY = circleY - radius;
-//			g.drawString(labeledValue.getValue(), (float) labelX, (float) labelY);
-//		}
-		
-//		int numNodes = nodes.size();
-//		double denominator = Math.max(1, numNodes - 1); // don't divide by 0!
-//		
-//		for (int i = 0; i < numNodes; i++) {
-//			Point2D centerPoint = centerLine.getPoint(i / denominator);
-//			NodeView view = new NodeView(nodes.get(i), centerPoint, painter, nodeRadiusCoding);
-//			nodeViews.put(nodes.get(i), view);
-//		}
-		
+		}		
 	}
-
-
-
 }

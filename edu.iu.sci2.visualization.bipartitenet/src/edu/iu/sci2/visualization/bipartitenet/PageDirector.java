@@ -18,7 +18,7 @@ import edu.iu.sci2.visualization.bipartitenet.component.RightAlignedLabel;
 import edu.iu.sci2.visualization.bipartitenet.model.BipartiteGraphDataModel;
 import edu.iu.sci2.visualization.bipartitenet.model.Edge;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
-import edu.iu.sci2.visualization.bipartitenet.scale.BrightnessScale;
+import edu.iu.sci2.visualization.bipartitenet.scale.ColorIntensityScale;
 import edu.iu.sci2.visualization.bipartitenet.scale.ConstantCircleRadius;
 import edu.iu.sci2.visualization.bipartitenet.scale.ConstantColor;
 import edu.iu.sci2.visualization.bipartitenet.scale.Scale;
@@ -51,12 +51,12 @@ public class PageDirector implements Paintable {
 		// Only put in a legend if the nodes/edges are weighted.
 		Scale<Double,Double> nodeCoding = makeNodeCoding();
 		if (dataModel.hasWeightedNodes()) {
-			makeNodeLegend(nodeCoding);
+			painter.add(makeNodeLegend(nodeCoding));
 		}
 
 		Scale<Double,Color> edgeCoding = makeEdgeCoding();
 		if (dataModel.hasWeightedEdges()) {
-			makeEdgeLegend(edgeCoding);
+			painter.add(makeEdgeLegend(edgeCoding));
 		}
 		
 		BipartiteGraphRenderer renderer = new BipartiteGraphRenderer(dataModel,
@@ -119,7 +119,7 @@ public class PageDirector implements Paintable {
 
 	private Scale<Double,Color> makeEdgeCoding() {
 		if (dataModel.hasWeightedEdges()) {
-			Scale<Double,Color> colorScale = BrightnessScale.createWithDefaultColor();
+			Scale<Double,Color> colorScale = ColorIntensityScale.createWithDefaultColor();
 			colorScale.train(Iterables.transform(dataModel.getEdges(), Edge.WEIGHT_GETTER));
 			colorScale.doneTraining();
 			return colorScale;
@@ -128,23 +128,23 @@ public class PageDirector implements Paintable {
 		}
 	}
 
-	private void makeNodeLegend(Scale<Double,Double> coding) {
+	private Paintable makeNodeLegend(Scale<Double,Double> coding) {
 		ImmutableList<Double> labels = 
 				ImmutableList.<Double>builder().add(0.0).addAll(coding.getExtrema()).build();
 		CircleRadiusLegend legend = new CircleRadiusLegend(
 				CIRCLE_LEGEND_POSITION, "Circle Area: "
 						+ dataModel.getNodeValueAttribute(), coding, labels,
 				MAX_RADIUS);
-		painter.add(legend);
+		return legend;
 	}
 
-	private void makeEdgeLegend(Scale<Double, Color> edgeCoding) {
+	private Paintable makeEdgeLegend(Scale<Double, Color> edgeCoding) {
 		ImmutableList<Double> edgeLegendLabels = 
 				ImmutableList.<Double>builder().add(0.0).addAll(edgeCoding.getExtrema()).build();
 		EdgeWeightLegend legend = new EdgeWeightLegend(EDGE_LEGEND_POSITION, 
 				"Edge Weight: " + dataModel.getEdgeValueAttribute(),
 				edgeCoding, edgeLegendLabels);
-		painter.add(legend);
+		return legend;
 	}
 
 	@Override

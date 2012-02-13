@@ -56,7 +56,7 @@ public class Range<T> {
 		max = ordering.nullsFirst().max(max, item);
 	}
 	
-	public void considerAll(Iterable<T> items) {
+	public void considerAll(Iterable<? extends T> items) {
 		for (T item : items) {
 			consider(item);
 		}

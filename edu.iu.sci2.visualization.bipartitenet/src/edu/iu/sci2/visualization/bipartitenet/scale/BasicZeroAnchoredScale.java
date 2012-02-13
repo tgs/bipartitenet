@@ -38,8 +38,8 @@ public class BasicZeroAnchoredScale implements Scale<Double, Double> {
 	public void train(Iterable<Double> trainingData) {
 		Preconditions.checkState(! doneTraining, "Tried to add more training data after done training!");
 		dataRange.considerAll(trainingData);
-		this.slope = (resultForMax - resultForZero) / dataRange.getMax() - 0;
-		this.intercept = resultForZero;
+		this.slope = (resultForMax - resultForZero) / (dataRange.getMax() - 0);
+		this.intercept = resultForZero; // TODO move to constructor?  up to you
 	}
 	
 	@Override

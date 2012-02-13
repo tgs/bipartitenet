@@ -29,13 +29,14 @@ public class EdgeView implements Paintable {
 
 	@Override
 	public void paint(Graphics2D gIn) {
-		Graphics2D g = (Graphics2D) gIn.create();
+		Graphics2D g = (Graphics2D) gIn.create(); // TODO redundant?
 		Color edgeColor = edgeCoding.apply(e.getWeight());
 		g.setColor(edgeColor);
 		LineSegment2D grossLine = new LineSegment2D(src.getNodeCenter(), dest.getNodeCenter());
 		double tStart = (src.getRadius() + NODE_EDGE_SPACE) / grossLine.getLength(),
-				tEnd = (dest.getRadius() + NODE_EDGE_SPACE) / grossLine.getLength();
-		AbstractLine2D fineLine = grossLine.getSubCurve(tStart, 1 - tEnd);
+				tEnd = (grossLine.getLength() - dest.getRadius() - NODE_EDGE_SPACE)
+							/ grossLine.getLength();
+		AbstractLine2D fineLine = grossLine.getSubCurve(tStart, tEnd);
 		
 		fineLine.draw(g);
 

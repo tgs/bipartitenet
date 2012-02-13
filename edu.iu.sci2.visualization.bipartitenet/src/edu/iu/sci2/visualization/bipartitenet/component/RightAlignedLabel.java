@@ -22,8 +22,7 @@ public class RightAlignedLabel implements Paintable {
 
 	@Override
 	public void paint(Graphics2D g) {
-		TextLayout tl = new TextLayout(text,
-				font, g.getFontRenderContext());
+		TextLayout tl = new TextLayout(text, font, g.getFontRenderContext());
 		Rectangle2D bounds = tl.getBounds();
 		tl.draw(g, (float) (rightBaseline.getX() - bounds.getWidth()), (float) rightBaseline.getY());
 	}

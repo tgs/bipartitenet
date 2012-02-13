@@ -23,6 +23,7 @@ public class ConstantColor implements Scale<Double, Color> {
 
 	@Override
 	public ImmutableList<Double> getExtrema() {
+		// TODO 
 		return ImmutableList.of();
 	}
 }
