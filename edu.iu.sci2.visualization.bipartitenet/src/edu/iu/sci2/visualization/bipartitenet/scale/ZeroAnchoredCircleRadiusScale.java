@@ -21,7 +21,10 @@ public class ZeroAnchoredCircleRadiusScale implements Scale<Double,Double> {
 	}
 
 	public Double apply(Double value) {
-		// TODO negatives?
+		// Don't sqrt(negative), it would be nasty to return NaN.
+		if (value < 0) {
+			return MIN_RADIUS;
+		}
 		return Math.sqrt(areaScale.apply(value) / Math.PI);
 	}
 
