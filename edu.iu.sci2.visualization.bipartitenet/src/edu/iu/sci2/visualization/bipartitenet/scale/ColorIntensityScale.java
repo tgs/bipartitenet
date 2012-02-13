@@ -5,16 +5,17 @@ import java.awt.Color;
 import com.google.common.collect.ImmutableList;
 
 public class ColorIntensityScale implements Scale<Double,Color> {
+	private static final double MAXIMUM_INTENSITY = 1;
+	private static final double MINIMUM_INTENSITY = 0.1;
 	private static final float DEFAULT_HUE = 0; 
 	private static final float DEFAULT_SATURATION = 0;
 
-	private final BasicZeroAnchoredScale brightnessScale; 
+	private final BasicZeroAnchoredScale intensityScale; 
 	private final float hue;
 	private final float saturation; 
 
 	private ColorIntensityScale(float hue, float saturation) {
-		// TODO Explain .1 or .9 or whatever
-		this.brightnessScale = new BasicZeroAnchoredScale(0.1, 1);
+		this.intensityScale = new BasicZeroAnchoredScale(MINIMUM_INTENSITY, MAXIMUM_INTENSITY);
 		this.hue = hue;
 		this.saturation = saturation;
 	}
@@ -29,19 +30,20 @@ public class ColorIntensityScale implements Scale<Double,Color> {
 	
 	@Override
 	public Color apply(Double value) {
-		// TODO Explain 1-
-		return Color.getHSBColor(hue, saturation, 1 - brightnessScale.apply(value).floatValue());
+		// To get the Brightness(B) value, we take (1 - intensity).
+		// This is because brightness==1 draws white, 0 draws black.  dark marks seem more intense.
+		return Color.getHSBColor(hue, saturation, 1 - intensityScale.apply(value).floatValue());
 	}
 	
 	public void train(Iterable<Double> trainingData) {
-		brightnessScale.train(trainingData);
+		intensityScale.train(trainingData);
 	}
 	
 	public void doneTraining() {
-		brightnessScale.doneTraining();
+		intensityScale.doneTraining();
 	}
 	
 	public ImmutableList<Double> getExtrema() {
-		return brightnessScale.getExtrema();
+		return intensityScale.getExtrema();
 	}
 }
