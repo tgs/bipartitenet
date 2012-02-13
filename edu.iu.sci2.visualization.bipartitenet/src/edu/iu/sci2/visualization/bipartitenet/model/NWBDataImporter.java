@@ -67,6 +67,10 @@ public class NWBDataImporter {
 			double weight;			
 			if (nodeWeightCol != null) {
 				weight = NumberUtilities.interpretObjectAsDouble(attributes.get(nodeWeightCol));
+				if (weight < 0) {
+					log(LogService.LOG_WARNING, String.format(
+							"Node '%s' has negative weight (%d), which is not handled well by this algorithm's display code.", label, weight));
+				}
 			} else {
 				weight = 1;
 			}
@@ -88,7 +92,7 @@ public class NWBDataImporter {
 		@Override
 		public void addDirectedEdge(int sourceNode, int targetNode,
 				Map<String, Object> attributes) {
-			// Ignore original direction of directed edges so they're always left->right.    TODO rethink
+			// Ignore original direction of directed edges so they're always left->right.
 			addUndirectedEdge(sourceNode, targetNode, attributes);
 		}
 	
@@ -114,6 +118,11 @@ public class NWBDataImporter {
 			double value;
 			if (edgeWeightCol != null) {
 				value = NumberUtilities.interpretObjectAsDouble(attributes.get(edgeWeightCol));
+				if (value < 0) {
+					log(LogService.LOG_WARNING, String.format(
+							"Edge between %s and %s has negative weight (%d), which is not handled well by this algorithm's display code.", 
+							left, right, value));
+				}
 			} else {
 				value = 1;
 			}
@@ -165,20 +174,22 @@ public class NWBDataImporter {
 			 * mutateParameters. */
 			assert ((nodeWeightCol == null) || (schema.containsKey(nodeWeightCol)));
 			
-			// TODO explain
+			/* 
+			 * The presence of this column should already have been checked during the 
+			 * mutateParameters process.
+			 */
 			assert (schema.containsKey(nodeTypeCol));
 		}
 	
 		public BipartiteGraphDataModel constructGraphDataModel() {
-			// TODO be specific, which type is missing?			
+			// The graph being completely empty is an error, not a warning, and is noticed at a higher level.
 			if (! gotAnyLeftNodes) {
-				log(LogService.LOG_WARNING, "Supposedly bipartite graph has no left-hand nodes");
+				log(LogService.LOG_WARNING, String.format("Supposedly bipartite graph has no left-hand (%s = %s) nodes", nodeTypeCol, typeForLeftSide));
 			}
 			if (! gotAnyRightNodes) {
-				log(LogService.LOG_WARNING, "Supposedly bipartite graph has no right-hand nodes");
+				log(LogService.LOG_WARNING, String.format("Supposedly bipartite graph has no right-hand (%s != %s) nodes", nodeTypeCol, typeForLeftSide));
 			}
 			
-			// TODO could both types be absent?  exception, warning?
 			
 			return new BipartiteGraphDataModel(nodeById.values(), edges, nodeWeightCol, edgeWeightCol);
 		}

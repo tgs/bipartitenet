@@ -57,6 +57,9 @@ public class BipartiteNetAlgorithm implements Algorithm {
 		/* TODO Elaborate in execute() exception messages */		
 		try {
 			BipartiteGraphDataModel model = importer.constructModelFromFile(new FileInputStream(nwbFile));
+			if (!model.hasAnyNodes()) {
+				throw new AlgorithmExecutionException("Input has no nodes, refusing to make empty graph");
+			}
 			PageDirector r = new PageDirector(model, leftSideType, leftSideTitle, rightSideType, rightSideTitle);
 			
 			Data pngData = drawToPNGFile(r);

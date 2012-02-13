@@ -75,4 +75,9 @@ public class BipartiteGraphDataModel {
 		return edgeValueAttribute != null;
 	}
 
+
+	public boolean hasAnyNodes() {
+		return ! (leftNodes.isEmpty() && rightNodes.isEmpty()); 
+	}
+
 }
