@@ -23,15 +23,17 @@ import com.google.common.collect.ImmutableList;
 public class BasicZeroAnchoredScale implements Scale<Double, Double> {
 	private final double resultForZero;
 	private final double resultForMax;
+	private final double intercept;
+	
+	private final Range<Double> dataRange = Range.create();
 	
 	private double slope;
-	private double intercept;
 	private boolean doneTraining = false;
-	private final Range<Double> dataRange = Range.create();
 	
 	public BasicZeroAnchoredScale(double resultForZero, double resultForMax) {
 		this.resultForZero = resultForZero;
 		this.resultForMax = resultForMax;
+		this.intercept = resultForZero;
 	}
 	
 	@Override
@@ -39,7 +41,6 @@ public class BasicZeroAnchoredScale implements Scale<Double, Double> {
 		Preconditions.checkState(! doneTraining, "Tried to add more training data after done training!");
 		dataRange.considerAll(trainingData);
 		this.slope = (resultForMax - resultForZero) / (dataRange.getMax() - 0);
-		this.intercept = resultForZero; // TODO move to constructor?  up to you
 	}
 	
 	@Override
