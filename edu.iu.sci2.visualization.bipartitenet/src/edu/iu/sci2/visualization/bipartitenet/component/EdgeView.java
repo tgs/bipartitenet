@@ -28,8 +28,7 @@ public class EdgeView implements Paintable {
 	}
 
 	@Override
-	public void paint(Graphics2D gIn) {
-		Graphics2D g = (Graphics2D) gIn.create(); // TODO redundant?
+	public void paint(Graphics2D g) {
 		Color edgeColor = edgeCoding.apply(e.getWeight());
 		g.setColor(edgeColor);
 		LineSegment2D grossLine = new LineSegment2D(src.getNodeCenter(), dest.getNodeCenter());
