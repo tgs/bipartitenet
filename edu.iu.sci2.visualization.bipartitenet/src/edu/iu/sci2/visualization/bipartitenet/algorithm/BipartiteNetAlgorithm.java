@@ -54,12 +54,10 @@ public class BipartiteNetAlgorithm implements Algorithm {
 
 	@Override
 	public Data[] execute() throws AlgorithmExecutionException {
-		/* TODO Elaborate in execute() exception messages */		
 		try {
 			BipartiteGraphDataModel model = importer.constructModelFromFile(new FileInputStream(nwbFile));
 			if (!model.hasAnyNodes()) {
-				// TODO be friendly
-				throw new AlgorithmExecutionException("Input has no nodes, refusing to make empty graph");
+				throw new AlgorithmExecutionException("Input graph has no nodes, can't make a meaningful graph.  Stopping.");
 			}
 			PageDirector r = new PageDirector(model, leftSideType, leftSideTitle, rightSideType, rightSideTitle);
 			
@@ -68,11 +66,11 @@ public class BipartiteNetAlgorithm implements Algorithm {
 			
 			return new Data[] { pngData, psData }; 
 		} catch (FileNotFoundException e) {
-			throw new AlgorithmExecutionException(e);
+			throw new AlgorithmExecutionException("Internal error: data file disappeared?", e);
 		} catch (IOException e) {
 			throw new AlgorithmExecutionException(e);
 		} catch (ParsingException e) {
-			throw new AlgorithmExecutionException(e);
+			throw new AlgorithmExecutionException(".nwb graph file parsing problem", e);
 		}
 	}
 
