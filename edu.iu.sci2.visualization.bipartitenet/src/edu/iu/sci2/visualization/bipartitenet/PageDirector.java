@@ -19,7 +19,7 @@ import edu.iu.sci2.visualization.bipartitenet.model.BipartiteGraphDataModel;
 import edu.iu.sci2.visualization.bipartitenet.model.Edge;
 import edu.iu.sci2.visualization.bipartitenet.model.Node;
 import edu.iu.sci2.visualization.bipartitenet.scale.ColorIntensityScale;
-import edu.iu.sci2.visualization.bipartitenet.scale.ConstantCircleRadius;
+import edu.iu.sci2.visualization.bipartitenet.scale.ConstantValue;
 import edu.iu.sci2.visualization.bipartitenet.scale.ConstantColor;
 import edu.iu.sci2.visualization.bipartitenet.scale.Scale;
 import edu.iu.sci2.visualization.bipartitenet.scale.ZeroAnchoredCircleRadiusScale;
@@ -113,7 +113,7 @@ public class PageDirector implements Paintable {
 			nodeScale.doneTraining();
 			return nodeScale;
 		} else {
-			return new ConstantCircleRadius(calculateMaxNodeRadius());
+			return new ConstantValue<Double, Double>(calculateMaxNodeRadius());
 		}
 	}
 
