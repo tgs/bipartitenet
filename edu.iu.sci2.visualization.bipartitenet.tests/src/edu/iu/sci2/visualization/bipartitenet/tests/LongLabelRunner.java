@@ -68,7 +68,8 @@ public class LongLabelRunner {
 		EPSDocumentGraphics2D g2d = new EPSDocumentGraphics2D(false);
 		g2d.setGraphicContext(new GraphicContext());
 		g2d.setupDocument(out, PageDirector.PAGE_WIDTH, PageDirector.PAGE_HEIGHT);
-		g2d.drawString("Gah, does this show up as a string?", 10, 10);
+		g2d.setClip(0, 0, PageDirector.PAGE_WIDTH, PageDirector.PAGE_HEIGHT);
+//		g2d.drawString("Gah, does this show up as a string?", 10, 10);
 		PageDirector r = new PageDirector(model, "Who", "Who title", "What", "What title");
 		r.paint(g2d);
 		g2d.finish();

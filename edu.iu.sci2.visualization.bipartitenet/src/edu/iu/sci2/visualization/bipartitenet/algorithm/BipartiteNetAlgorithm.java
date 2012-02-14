@@ -80,6 +80,7 @@ public class BipartiteNetAlgorithm implements Algorithm {
 		PSDocumentGraphics2D g2d = new PSDocumentGraphics2D(false);
 		g2d.setGraphicContext(new GraphicContext());
 		g2d.setupDocument(out, PageDirector.PAGE_WIDTH, PageDirector.PAGE_HEIGHT);
+		g2d.setClip(0, 0, PageDirector.PAGE_WIDTH, PageDirector.PAGE_HEIGHT);
 		paintable.paint(g2d);
 		g2d.finish();
 		out.close();
